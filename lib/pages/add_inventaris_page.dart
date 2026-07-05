@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import '../widget/background.dart';
-import '../widget/form_input_user.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/user_page.dart';
 import '../pages/report.dart';
+import '../pages/senjata.dart';
+import '../widget/form_inputan_inventaris.dart';
 
-class AddUserPage extends StatefulWidget {
-  const AddUserPage({super.key});
+class AddInventarisPage extends StatefulWidget {
+  const AddInventarisPage({super.key});
 
   @override
-  State<AddUserPage> createState() => _AddUserPageState();
+  State<AddInventarisPage> createState() => _AddInventarisPageState();
 }
 
-class _AddUserPageState extends State<AddUserPage> {
+class _AddInventarisPageState extends State<AddInventarisPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +50,7 @@ class _AddUserPageState extends State<AddUserPage> {
                           menu(Icons.dashboard, "Dashboard"),
                           menu(Icons.description, "Laporan"),
                           menu(Icons.map, "Wilayah"),
-                          menu(Icons.document_scanner, "Inventaris"),
+                          menu(Icons.document_scanner, "Inventaris", selected: true),
                           menu(Icons.people_alt, "Organisasi"),
                           menu(Icons.list, "Satwa"),
                           menu(Icons.list, "Senjata Api"),
@@ -59,7 +60,7 @@ class _AddUserPageState extends State<AddUserPage> {
                           menu(Icons.people, "Personel"),
                           menu(Icons.list, "Stok Amunisi"),
                           menu(Icons.device_hub, "Perangkat"),
-                          menu(Icons.people, "Pengguna", selected: true),
+                          menu(Icons.people, "Pengguna"),
                           menu(Icons.settings, "Pengaturan"),
                         ],
                       ),
@@ -79,7 +80,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pop(context);
+                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
                         label: const Text("Kembali"),
@@ -101,7 +102,7 @@ class _AddUserPageState extends State<AddUserPage> {
                             ),
                             child: const Padding(
                               padding: EdgeInsets.all(25),
-                              child: FormTambahUser(),
+                              child: FormTambahInventaris(),
                             ),
                           ),
                         ),
@@ -139,28 +140,35 @@ class _AddUserPageState extends State<AddUserPage> {
           // );
           Widget page;
 
-          switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
+        switch (title) {
+          case "Dashboard":
+            page = const DashboardPage();
+            break;
+
+          case "Pengaturan":
+            page = const AccountSettingPage();
+            break;
+
+          case "Laporan":
+            page = const ReportPage();
+            break;
+
+          case "Pengguna":
+            page = const UserPage();
+            break;
+          
+           case "Senjata":
+              page = const SenjataPage();
               break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+          default:
+            page = const DashboardPage();
+        }
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
-
-            case "Pengguna":
-              page = const UserPage();
-              break;
-
-            default:
-              page = const DashboardPage();
-          }
-
-          Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => page),
+        );
         },
       ),
     );

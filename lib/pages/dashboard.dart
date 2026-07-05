@@ -3,6 +3,10 @@ import '../widget/background.dart';
 import '../pages/pangaturan.dart';
 import '../pages/user_page.dart';
 import '../pages/report.dart';
+import '../pages/satwa.dart';
+import '../pages/senjata.dart';
+import '../pages/personel.dart';
+import '../pages/inventaris.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -50,10 +54,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           menu(Icons.document_scanner, "Inventaris"),
                           menu(Icons.people_alt, "Organisasi"),
                           menu(Icons.list, "Satwa"),
-                          menu(Icons.list, "Senjata Api"),
-                          menu(Icons.list, "Kategori Senjata"),
-                          menu(Icons.inbox, "Kotak Masuk"),
-                          menu(Icons.outbox, "Kotak Keluar"),
+                          menu(Icons.list, "Senjata"),
+                          menu(Icons.list, "Kategori"),
+                          menu(Icons.inbox, "Inbox"),
+                          menu(Icons.outbox, "Outbox"),
                           menu(Icons.people, "Personel"),
                           menu(Icons.list, "Stok Amunisi"),
                           menu(Icons.device_hub, "Perangkat"),
@@ -125,7 +129,23 @@ class _DashboardPageState extends State<DashboardPage> {
             case "Laporan":
               page = const ReportPage();
               break;
+            
+            case "Senjata":
+              page = const SenjataPage();
+              break;
 
+            case "Satwa":
+              page = const SatwaPage();
+              break;
+
+            case "Personel":
+              page = const PersonelPage();
+              break;
+
+            case "Inventaris":
+              page = const InventarisPage();
+              break;
+              
             case "Pengguna":
               page = const UserPage();
               break;

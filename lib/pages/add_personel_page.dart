@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import '../widget/background.dart';
-import '../widget/form_input_user.dart';
+import '../widget/form_input_personel.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/user_page.dart';
 import '../pages/report.dart';
 
-class AddUserPage extends StatefulWidget {
-  const AddUserPage({super.key});
+class AddPersonelPage extends StatefulWidget {
+  const AddPersonelPage({super.key});
 
   @override
-  State<AddUserPage> createState() => _AddUserPageState();
+  State<AddPersonelPage> createState() => _AddPersonelPageState();
 }
 
-class _AddUserPageState extends State<AddUserPage> {
+class _AddPersonelPageState extends State<AddPersonelPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,10 +56,10 @@ class _AddUserPageState extends State<AddUserPage> {
                           menu(Icons.list, "Kategori Senjata"),
                           menu(Icons.inbox, "Kotak Masuk"),
                           menu(Icons.outbox, "Kotak Keluar"),
-                          menu(Icons.people, "Personel"),
+                          menu(Icons.people, "Personel", selected: true),
                           menu(Icons.list, "Stok Amunisi"),
                           menu(Icons.device_hub, "Perangkat"),
-                          menu(Icons.people, "Pengguna", selected: true),
+                          menu(Icons.people, "Pengguna"),
                           menu(Icons.settings, "Pengaturan"),
                         ],
                       ),
@@ -101,7 +101,7 @@ class _AddUserPageState extends State<AddUserPage> {
                             ),
                             child: const Padding(
                               padding: EdgeInsets.all(25),
-                              child: FormTambahUser(),
+                              child: FormTambahPersonel(),
                             ),
                           ),
                         ),
@@ -139,28 +139,31 @@ class _AddUserPageState extends State<AddUserPage> {
           // );
           Widget page;
 
-          switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
-              break;
+        switch (title) {
+          case "Dashboard":
+            page = const DashboardPage();
+            break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+          case "Pengaturan":
+            page = const AccountSettingPage();
+            break;
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
+          case "Laporan":
+            page = const ReportPage();
+            break;
 
-            case "Pengguna":
-              page = const UserPage();
-              break;
+          case "Pengguna":
+            page = const UserPage();
+            break;
 
-            default:
-              page = const DashboardPage();
-          }
+          default:
+            page = const DashboardPage();
+        }
 
-          Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => page),
+        );
         },
       ),
     );

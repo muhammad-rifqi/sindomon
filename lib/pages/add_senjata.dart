@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import '../widget/background.dart';
-import '../widget/form_input_user.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/user_page.dart';
 import '../pages/report.dart';
+import '../pages/senjata.dart';
+import '../widget/form_input_senjata.dart';
 
-class AddUserPage extends StatefulWidget {
-  const AddUserPage({super.key});
+class AddSenjataPage extends StatefulWidget {
+  const AddSenjataPage({super.key});
 
   @override
-  State<AddUserPage> createState() => _AddUserPageState();
+  State<AddSenjataPage> createState() => _AddSenjataPageState();
 }
 
-class _AddUserPageState extends State<AddUserPage> {
+class _AddSenjataPageState extends State<AddSenjataPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +80,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pop(context);
+                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
                         label: const Text("Kembali"),
@@ -101,7 +102,7 @@ class _AddUserPageState extends State<AddUserPage> {
                             ),
                             child: const Padding(
                               padding: EdgeInsets.all(25),
-                              child: FormTambahUser(),
+                              child: FormTambahSenjata(),
                             ),
                           ),
                         ),
@@ -139,28 +140,35 @@ class _AddUserPageState extends State<AddUserPage> {
           // );
           Widget page;
 
-          switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
+        switch (title) {
+          case "Dashboard":
+            page = const DashboardPage();
+            break;
+
+          case "Pengaturan":
+            page = const AccountSettingPage();
+            break;
+
+          case "Laporan":
+            page = const ReportPage();
+            break;
+
+          case "Pengguna":
+            page = const UserPage();
+            break;
+          
+           case "Senjata":
+              page = const SenjataPage();
               break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+          default:
+            page = const DashboardPage();
+        }
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
-
-            case "Pengguna":
-              page = const UserPage();
-              break;
-
-            default:
-              page = const DashboardPage();
-          }
-
-          Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => page),
+        );
         },
       ),
     );

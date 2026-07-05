@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import '../widget/background.dart';
-import '../widget/form_input_user.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/user_page.dart';
 import '../pages/report.dart';
+import '../pages/senjata.dart';
+import '../widget/form_inputan_satwa.dart';
 
-class AddUserPage extends StatefulWidget {
-  const AddUserPage({super.key});
+class AddSatwaPage extends StatefulWidget {
+  const AddSatwaPage({super.key});
 
   @override
-  State<AddUserPage> createState() => _AddUserPageState();
+  State<AddSatwaPage> createState() => _AddSatwaPageState();
 }
 
-class _AddUserPageState extends State<AddUserPage> {
+class _AddSatwaPageState extends State<AddSatwaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +52,7 @@ class _AddUserPageState extends State<AddUserPage> {
                           menu(Icons.map, "Wilayah"),
                           menu(Icons.document_scanner, "Inventaris"),
                           menu(Icons.people_alt, "Organisasi"),
-                          menu(Icons.list, "Satwa"),
+                          menu(Icons.list, "Satwa", selected: true),
                           menu(Icons.list, "Senjata Api"),
                           menu(Icons.list, "Kategori Senjata"),
                           menu(Icons.inbox, "Kotak Masuk"),
@@ -59,7 +60,7 @@ class _AddUserPageState extends State<AddUserPage> {
                           menu(Icons.people, "Personel"),
                           menu(Icons.list, "Stok Amunisi"),
                           menu(Icons.device_hub, "Perangkat"),
-                          menu(Icons.people, "Pengguna", selected: true),
+                          menu(Icons.people, "Pengguna"),
                           menu(Icons.settings, "Pengaturan"),
                         ],
                       ),
@@ -79,7 +80,7 @@ class _AddUserPageState extends State<AddUserPage> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          Navigator.pop(context);
+                           Navigator.pop(context);
                         },
                         icon: const Icon(Icons.arrow_back),
                         label: const Text("Kembali"),
@@ -101,7 +102,7 @@ class _AddUserPageState extends State<AddUserPage> {
                             ),
                             child: const Padding(
                               padding: EdgeInsets.all(25),
-                              child: FormTambahUser(),
+                              child: FormTambahSatwa(),
                             ),
                           ),
                         ),
@@ -139,28 +140,35 @@ class _AddUserPageState extends State<AddUserPage> {
           // );
           Widget page;
 
-          switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
+        switch (title) {
+          case "Dashboard":
+            page = const DashboardPage();
+            break;
+
+          case "Pengaturan":
+            page = const AccountSettingPage();
+            break;
+
+          case "Laporan":
+            page = const ReportPage();
+            break;
+
+          case "Pengguna":
+            page = const UserPage();
+            break;
+          
+           case "Senjata":
+              page = const SenjataPage();
               break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+          default:
+            page = const DashboardPage();
+        }
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
-
-            case "Pengguna":
-              page = const UserPage();
-              break;
-
-            default:
-              page = const DashboardPage();
-          }
-
-          Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => page),
+        );
         },
       ),
     );
