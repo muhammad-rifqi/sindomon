@@ -87,7 +87,7 @@ class _FormTambahInventarisState extends State<FormTambahInventaris> {
             "Kategori Assets *",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-
+ 
           const SizedBox(height: 8),
 
           DropdownButtonFormField<String>(

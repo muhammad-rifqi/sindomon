@@ -74,32 +74,196 @@ class _DashboardPageState extends State<DashboardPage> {
               /// CONTENT
               /// ========================
               Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.admin_panel_settings,
-                        size: 80,
-                        color: Colors.blue,
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        "Selamat Datang Administrator",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "Silakan pilih menu di sebelah kiri untuk memulai.",
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    ],
+  child: Stack(
+    children: [
+
+      /// Background Map
+      Positioned.fill(
+        child: Image.asset(
+          "assets/images/dashboard_map.png",
+          fit: BoxFit.cover,
+        ),
+      ),
+
+      /// Overlay agar sedikit gelap
+      Positioned.fill(
+        child: Container(
+          color: Colors.black.withValues(alpha: 0.20)
+        ),
+      ),
+
+      /// Logo + Judul
+      Positioned(
+        top: 20,
+        left: 20,
+        child: Row(
+          children: [
+            const Icon(
+              Icons.shield,
+              color: Colors.amber,
+              size: 40,
+            ),
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "SINDOMON - NATIONAL COMMAND CENTER",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
                   ),
                 ),
+                Text(
+                  DateTime.now().toString(),
+                  style: const TextStyle(
+                    color: Colors.white70,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+
+      /// KPI Kanan Atas
+      Positioned(
+        top: 20,
+        right: 20,
+        child: Container(
+          width: 240,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.20),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.cyanAccent,
+            ),
+          ),
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              Text(
+                "Total Personel",
+                style: TextStyle(color: Colors.white70),
               ),
+
+              SizedBox(height: 5),
+
+              Text(
+                "153,500",
+                style: TextStyle(
+                  color: Colors.cyanAccent,
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(height: 15),
+
+              Text(
+                "Defense Equipment",
+                style: TextStyle(color: Colors.white70),
+              ),
+
+              SizedBox(height: 5),
+
+              Text(
+                "97%",
+                style: TextStyle(
+                  color: Colors.cyanAccent,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(height: 15),
+
+              Text(
+                "Vacant Position",
+                style: TextStyle(color: Colors.white70),
+              ),
+
+              SizedBox(height: 5),
+
+              Text(
+                "218",
+                style: TextStyle(
+                  color: Colors.cyanAccent,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      /// Panel kiri bawah
+      Positioned(
+        left: 20,
+        bottom: 20,
+        child: Container(
+          width: 250,
+          height: 120,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ListView(
+            children: const [
+
+              Text(
+                "Sitkamtibmas Reports",
+                style: TextStyle(color: Colors.white),
+              ),
+
+              SizedBox(height: 10),
+
+              Text(
+                "• Laporan 1\n"
+                "• Laporan 2\n"
+                "• Laporan 3\n"
+                "• Laporan 4\n"
+                "• Laporan 5",
+                style: TextStyle(
+                  color: Colors.white70,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      /// KPI bawah tengah
+      Positioned(
+        bottom: 20,
+        left: 300,
+        child: Row(
+          children: [
+
+            _kpiCard(
+              "Active Fleet",
+              "300",
+            ),
+
+            const SizedBox(width: 20),
+
+            _kpiCard(
+              "K9 Standby",
+              "140",
+            ),
+
+          ],
+        ),
+      ),
+
+    ],
+  ),
+),
             ],
           ),
         ),
@@ -159,4 +323,40 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+
+  Widget _kpiCard(String title, String value) {
+  return Container(
+    width: 140,
+    padding: const EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: Colors.black.withValues(alpha: 0.20),
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: Colors.white24),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white70,
+          ),
+        ),
+
+        const SizedBox(height: 8),
+
+        Text(
+          value,
+          style: const TextStyle(
+            color: Colors.cyanAccent,
+            fontWeight: FontWeight.bold,
+            fontSize: 28,
+          ),
+        ),
+
+      ],
+    ),
+  );
+}
 }
