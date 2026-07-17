@@ -180,14 +180,14 @@ class _SenjataPageState extends State<SenjataPage> {
                               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25),
-                                color: Colors.white.withOpacity(0.18),
+                                color: Colors.white.withValues(alpha: 0.18),
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(0.25),
+                                  color: Colors.white.withValues(alpha: 0.25),
                                   width: 1.2,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
+                                    color: Colors.black.withValues(alpha: 0.08),
                                     blurRadius: 20,
                                     offset: const Offset(0, 10),
                                   ),
@@ -199,7 +199,7 @@ class _SenjataPageState extends State<SenjataPage> {
                                           Container(
                                             padding: const EdgeInsets.all(10),
                                             decoration: BoxDecoration(
-                                              color: Colors.amber.withOpacity(0.2),
+                                              color: Colors.amber.withValues(alpha: 0.2),
                                               borderRadius: BorderRadius.circular(15),
                                             ),
                                             child: const Icon(
@@ -241,17 +241,17 @@ class _SenjataPageState extends State<SenjataPage> {
                                                   color: Colors.black54,
                                                 ),
                                                 filled: true,
-                                                fillColor: Colors.white.withOpacity(0.15),
+                                                fillColor: Colors.white.withValues(alpha:0.15),
                                                 border: OutlineInputBorder(
                                                   borderRadius: BorderRadius.circular(30),
                                                   borderSide: BorderSide(
-                                                    color: Colors.white.withOpacity(0.3),
+                                                    color: Colors.white.withValues(alpha: 0.3),
                                                   ),
                                                 ),
                                                 enabledBorder: OutlineInputBorder(
                                                   borderRadius: BorderRadius.circular(30),
                                                   borderSide: BorderSide(
-                                                    color: Colors.white.withOpacity(0.3),
+                                                    color: Colors.white.withValues(alpha: 0.3),
                                                   ),
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
@@ -269,7 +269,7 @@ class _SenjataPageState extends State<SenjataPage> {
 
                                           Container(
                                             decoration: BoxDecoration(
-                                              color: Colors.white.withOpacity(0.15),
+                                              color: Colors.white.withValues(alpha:0.15),
                                               shape: BoxShape.circle,
                                             ),
                                             child: IconButton(
@@ -288,7 +288,7 @@ class _SenjataPageState extends State<SenjataPage> {
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               border: Border.all(
-                                                color: Colors.white.withOpacity(0.5),
+                                                color: Colors.white.withValues(alpha: 0.5),
                                                 width: 2,
                                               ),
                                             ),
