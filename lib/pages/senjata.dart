@@ -183,7 +183,7 @@ class _SenjataPageState extends State<SenjataPage> {
                             const Text(
                               "Dashboard / Inventaris / Senjata Api",
                               style: TextStyle(
-                                color: Colors.black26,
+                                color: Colors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -238,14 +238,14 @@ class _SenjataPageState extends State<SenjataPage> {
                                 Text(
                                   "Administrator",
                                   style: TextStyle(
-                                    color: Colors.black26,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
                                   "Super Admin",
                                   style: TextStyle(
-                                    color: Colors.black26,
+                                    color: Colors.black,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -268,7 +268,7 @@ class _SenjataPageState extends State<SenjataPage> {
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black26,
+                              color: Colors.black,
                             ),
                           ),
 
