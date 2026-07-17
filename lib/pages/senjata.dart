@@ -169,7 +169,7 @@ class _SenjataPageState extends State<SenjataPage> {
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(18),
-                          border: Border.all(color: Colors.white24),
+                          border: Border.all(color: Colors.black26),
                         ),
                         child: Row(
                           children: [
@@ -183,7 +183,7 @@ class _SenjataPageState extends State<SenjataPage> {
                             const Text(
                               "Dashboard / Inventaris / Senjata Api",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black26,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -198,7 +198,7 @@ class _SenjataPageState extends State<SenjataPage> {
                                   hintText: "Cari Menu...",
                                   prefixIcon: const Icon(Icons.search),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: Colors.white10,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide.none,
@@ -216,7 +216,7 @@ class _SenjataPageState extends State<SenjataPage> {
                               onPressed: () {},
                               icon: const Icon(
                                 Icons.notifications_none,
-                                color: Colors.white,
+                                color: Colors.black26,
                               ),
                             ),
 
@@ -238,14 +238,14 @@ class _SenjataPageState extends State<SenjataPage> {
                                 Text(
                                   "Administrator",
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black26,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
                                   "Super Admin",
                                   style: TextStyle(
-                                    color: Colors.white70,
+                                    color: Colors.black26,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -268,7 +268,7 @@ class _SenjataPageState extends State<SenjataPage> {
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: Colors.black26,
                             ),
                           ),
 
@@ -307,10 +307,13 @@ class _SenjataPageState extends State<SenjataPage> {
                           hintText: "Cari Senjata...",
                           prefixIcon: const Icon(Icons.search),
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: Colors.white10,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide.none,
+                            borderSide: BorderSide( 
+                                color: Colors.white,
+                                width: 1.5,
+                            ),
                           ),
                         ),
                       ),
@@ -413,7 +416,7 @@ class _SenjataPageState extends State<SenjataPage> {
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.white12),
+                          border: Border.all(color: Colors.black26),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -421,7 +424,7 @@ class _SenjataPageState extends State<SenjataPage> {
                             Text(
                               "© 2026 SINDOMON Management System. All rights reserved.",
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.7),
+                                color: Colors.black26.withValues(alpha: 0.7),
                                 fontSize: 13,
                               ),
                             ),

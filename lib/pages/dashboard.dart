@@ -80,7 +80,7 @@ class _DashboardPageState extends State<DashboardPage> {
       /// Background Map
       Positioned.fill(
         child: Image.asset(
-          "assets/images/dashboard_map.png",
+          "assets/images/background.png",
           fit: BoxFit.cover,
         ),
       ),

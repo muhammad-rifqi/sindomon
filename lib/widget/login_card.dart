@@ -13,6 +13,10 @@ class LoginCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: Colors.grey.shade300,
+          width: 1.5,
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

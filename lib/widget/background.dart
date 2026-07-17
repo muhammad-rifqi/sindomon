@@ -10,7 +10,7 @@ class AppBackground extends StatelessWidget {
     return Stack(
       children: [
         Positioned.fill(
-          child: Container(color: Colors.grey),
+          child: Container(color: Colors.white),
           //child: Image.asset(
           //  "assets/images/background.png",
           //  fit: BoxFit.cover,
