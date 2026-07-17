@@ -4,6 +4,7 @@ import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
 import '../pages/add_senjata.dart';
+import 'dart:ui';
 
 class SenjataPage extends StatefulWidget {
   const SenjataPage({super.key});
@@ -171,88 +172,166 @@ class _SenjataPageState extends State<SenjataPage> {
                           borderRadius: BorderRadius.circular(18),
                           border: Border.all(color: Colors.black26),
                         ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.home_rounded,
-                              color: Colors.amber,
-                            ),
-
-                            const SizedBox(width: 12),
-
-                            const Text(
-                              "Dashboard / Inventaris / Senjata Api",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-
-                            const Spacer(),
-
-                            SizedBox(
-                              width: 280,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: "Cari Menu...",
-                                  prefixIcon: const Icon(Icons.search),
-                                  filled: true,
-                                  fillColor: Colors.white10,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 0,
-                                  ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: Colors.white.withOpacity(0.18),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.25),
+                                  width: 1.2,
                                 ),
-                              ),
-                            ),
-
-                            const SizedBox(width: 20),
-
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.notifications_none,
-                                color: Colors.black26,
-                              ),
-                            ),
-
-                            const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.amber,
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.black,
-                              ),
-                            ),
-
-                            const SizedBox(width: 10),
-
-                            const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Administrator",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 10),
                                   ),
-                                ),
-                                Text(
-                                  "Super Admin",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
+                              child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.amber.withOpacity(0.2),
+                                              borderRadius: BorderRadius.circular(15),
+                                            ),
+                                            child: const Icon(
+                                              Icons.home_rounded,
+                                              color: Colors.amber,
+                                              size: 28,
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 15),
+
+                                          // Breadcrumb
+                                          const Expanded(
+                                            flex: 3,
+                                            child: Text(
+                                              "Dashboard / Inventaris / Senjata Api",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: Colors.black87,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 20),
+
+                                          // Search
+                                          SizedBox(
+                                            width: 250,
+                                            height: 45,
+                                            child: TextField(
+                                              decoration: InputDecoration(
+                                                hintText: "Cari Menu...",
+                                                hintStyle: const TextStyle(color: Colors.black54),
+                                                prefixIcon: const Icon(
+                                                  Icons.search,
+                                                  color: Colors.black54,
+                                                ),
+                                                filled: true,
+                                                fillColor: Colors.white.withOpacity(0.15),
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: BorderSide(
+                                                    color: Colors.white.withOpacity(0.3),
+                                                  ),
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: BorderSide(
+                                                    color: Colors.white.withOpacity(0.3),
+                                                  ),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(
+                                                    color: Colors.amber,
+                                                  ),
+                                                ),
+                                                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 20),
+
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withOpacity(0.15),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                Icons.notifications_none,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 15),
+
+                                          Container(
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Colors.white.withOpacity(0.5),
+                                                width: 2,
+                                              ),
+                                            ),
+                                            child: const CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: Colors.amber,
+                                              child: Icon(
+                                                Icons.person,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 10),
+
+                                          // Jangan pakai Expanded di sini
+                                          const Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Administrator",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  height: 1.2,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Super Admin",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54,
+                                                  height: 1.2,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
                             ),
-                          ],
-                        ),
+                          ),
+                        )
                       ),
 
                       const SizedBox(height: 25),
