@@ -3,6 +3,10 @@ import '../widget/background.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
+import '../pages/user_page.dart';
+import '../pages/senjata.dart';
+import '../pages/personel.dart';
+import '../pages/inventaris.dart';
 import '../pages/add_satwa.dart';
 import 'dart:ui';
 
@@ -657,6 +661,26 @@ class _SatwaPageState extends State<SatwaPage> {
 
               case "Laporan":
                 page = const ReportPage();
+                break;
+
+              case "Senjata":
+                page = const SenjataPage();
+                break;
+
+              case "Satwa":
+                page = const SatwaPage();
+                break;
+
+              case "Personel":
+                page = const PersonelPage();
+                break;
+
+              case "Inventaris":
+                page = const InventarisPage();
+                break;
+
+              case "Pengguna":
+                page = const UserPage();
                 break;
 
               default:

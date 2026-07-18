@@ -3,6 +3,10 @@ import '../widget/background.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
+import '../pages/user_page.dart';
+import '../pages/satwa.dart';
+import '../pages/senjata.dart';
+import '../pages/inventaris.dart';
 import '../pages/add_personel_page.dart';
 import 'dart:ui';
 
@@ -611,22 +615,42 @@ class _PersonelPageState extends State<PersonelPage> {
           onTap: () {
             Widget page;
 
-            switch (title) {
-              case "Dashboard":
-                page = const DashboardPage();
-                break;
+             switch (title) {
+            case "Dashboard":
+              page = const DashboardPage();
+              break;
 
-              case "Pengaturan":
-                page = const AccountSettingPage();
-                break;
+            case "Pengaturan":
+              page = const AccountSettingPage();
+              break;
 
-              case "Laporan":
-                page = const ReportPage();
-                break;
+            case "Laporan":
+              page = const ReportPage();
+              break;
 
-              default:
-                page = const DashboardPage();
-            }
+            case "Senjata":
+              page = const SenjataPage();
+              break;
+
+            case "Satwa":
+              page = const SatwaPage();
+              break;
+
+            case "Personel":
+              page = const PersonelPage();
+              break;
+
+            case "Inventaris":
+              page = const InventarisPage();
+              break;
+
+            case "Pengguna":
+              page = const UserPage();
+              break;
+
+            default:
+              page = const DashboardPage();
+          }
 
             Navigator.push(context, MaterialPageRoute(builder: (_) => page));
           },
