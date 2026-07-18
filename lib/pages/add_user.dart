@@ -30,11 +30,37 @@ class _AddUserPageState extends State<AddUserPage> {
               /// SIDEBAR
               /// ========================
               Container(
-                width: 240,
-                color: const Color(0xff221B58),
+                width: 260,
+                decoration: const BoxDecoration(
+                  color: Color(0xff1E1B4B),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 20,
+                      offset: Offset(5, 0),
+                    ),
+                  ],
+                ),
                 child: Column(
                   children: [
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 35),
+
+                    /// Logo
+                    CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.white.withValues(alpha: 0.15),
+                      child: const Icon(
+                        Icons.security,
+                        color: Colors.amber,
+                        size: 38,
+                      ),
+                    ),
+
+                    const SizedBox(height: 15),
 
                     const Text(
                       "SINDOMON",
@@ -42,33 +68,53 @@ class _AddUserPageState extends State<AddUserPage> {
                         color: Colors.white,
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
                       ),
                     ),
 
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 5),
+
+                    Text(
+                      "Management System",
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.6),
+                        fontSize: 13,
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
 
                     Expanded(
                       child: ListView(
-                        padding: EdgeInsets.zero,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         children: [
-                          menu(Icons.dashboard, "Dashboard"),
-                          menu(Icons.description, "Laporan"),
-                          menu(Icons.map, "Wilayah"),
-                          menu(Icons.document_scanner, "Inventaris"),
-                          menu(Icons.people_alt, "Organisasi"),
-                          menu(Icons.list, "Satwa"),
-                          menu(Icons.list, "Senjata Api"),
-                          menu(Icons.list, "Kategori Senjata"),
-                          menu(Icons.inbox, "Kotak Masuk"),
-                          menu(Icons.outbox, "Kotak Keluar"),
-                          menu(Icons.people, "Personel"),
-                          menu(Icons.list, "Stok Amunisi"),
-                          menu(Icons.device_hub, "Perangkat"),
-                          menu(Icons.people, "Pengguna", selected: true),
-                          menu(Icons.settings, "Pengaturan"),
+                          menu(Icons.dashboard_rounded, "Dashboard"),
+                          menu(Icons.description_rounded, "Laporan"),
+                          menu(Icons.map_rounded, "Wilayah"),
+                          menu(Icons.inventory_2_rounded, "Inventaris"),
+                          menu(Icons.groups_rounded, "Organisasi"),
+                          menu(Icons.pets_rounded, "Satwa"),
+                          menu(Icons.gavel_rounded, "Senjata"),
+                          menu(Icons.category_rounded, "Kategori Senjata"),
+                          menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
+                          menu(Icons.outbox_rounded, "Kotak Keluar"),
+                          menu(Icons.badge_rounded, "Personel"),
+                          menu(Icons.inventory_rounded, "Stok Amunisi"),
+                          menu(Icons.memory_rounded, "Perangkat"),
+                          menu(Icons.people_alt_rounded, "Pengguna", selected: true),
                         ],
                       ),
                     ),
+
+                    const Divider(
+                      color: Colors.white24,
+                      indent: 20,
+                      endIndent: 20,
+                    ),
+
+                    menu(Icons.settings_rounded, "Pengaturan"),
+
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

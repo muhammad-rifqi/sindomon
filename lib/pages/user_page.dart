@@ -383,7 +383,7 @@ class _UserPageState extends State<UserPage> {
                               );
                             },
                             icon: const Icon(Icons.add),
-                            label: const Text("Tambah Inventaris"),
+                            label: const Text("Tambah Pengguna"),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.amber,
                               foregroundColor: Colors.black,
