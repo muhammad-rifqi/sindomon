@@ -93,7 +93,7 @@ class _AccountSettingPageState extends State<AccountSettingPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
-                          menu(Icons.gavel_rounded, "Senjata Api"),
+                          menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
@@ -299,7 +299,7 @@ class _AccountSettingPageState extends State<AccountSettingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Tambah Pengguna",
+                            "Pengaturan Pengguna",
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.bold,
