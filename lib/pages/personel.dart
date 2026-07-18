@@ -108,7 +108,7 @@ class _PersonelPageState extends State<PersonelPage> {
                     const SizedBox(height: 5),
 
                     Text(
-                      "Management System",
+                      "Management Personel",
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.6),
                         fontSize: 13,
@@ -410,7 +410,7 @@ class _PersonelPageState extends State<PersonelPage> {
                       /// SEARCH
                       TextField(
                         decoration: InputDecoration(
-                          hintText: "Cari Satwa...",
+                          hintText: "Cari Personel...",
                           prefixIcon: const Icon(Icons.search),
                           filled: true,
                           fillColor: Colors.white10,
