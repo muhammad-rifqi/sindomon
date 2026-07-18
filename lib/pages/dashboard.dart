@@ -95,7 +95,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
-                          menu(Icons.gavel_rounded, "Senjata Api"),
+                          menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),

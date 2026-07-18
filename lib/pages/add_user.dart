@@ -3,8 +3,13 @@ import '../widget/background.dart';
 import '../widget/form_input_user.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
-import '../pages/user_page.dart';
 import '../pages/report.dart';
+import '../pages/user_page.dart';
+import '../pages/satwa.dart';
+import '../pages/senjata.dart';
+import '../pages/personel.dart';
+import '../pages/inventaris.dart';
+import 'dart:ui';
 
 class AddUserPage extends StatefulWidget {
   const AddUserPage({super.key});
@@ -77,20 +82,209 @@ class _AddUserPageState extends State<AddUserPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_back),
-                        label: const Text("Kembali"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
+                      /// ============================
+                      /// HEADER
+                      /// ============================
+                      Container(
+                        height: 75,
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(color: Colors.black26),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                                color: Colors.white.withValues(alpha: 0.18),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.25),
+                                  width: 1.2,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.08),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.amber.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: const Icon(
+                                      Icons.home_rounded,
+                                      color: Colors.amber,
+                                      size: 28,
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 15),
+
+                                  const Expanded(
+                                    child: Text(
+                                      "Dashboard / Tambah User",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 20),
+
+                                  SizedBox(
+                                    width: 250,
+                                    height: 45,
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        hintText: "Cari Menu...",
+                                        prefixIcon: const Icon(Icons.search),
+                                        filled: true,
+                                        fillColor: Colors.white.withValues(
+                                          alpha: 0.15,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              vertical: 12,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 20),
+
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.15,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.notifications_none,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 15),
+
+                                  Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.5,
+                                        ),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: const CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Colors.amber,
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 10),
+
+                                  const Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Administrator",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Super Admin",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
 
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 25),
 
+                      /// ============================
+                      /// TITLE
+                      /// ============================
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Pengaturan User",
+                            style: TextStyle(
+                              fontSize: 34,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          ElevatedButton.icon(
+                            onPressed: () => Navigator.pop(context),
+                            icon: const Icon(Icons.arrow_back),
+                            label: const Text("Kembali"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 22,
+                                vertical: 18,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      /// ============================
+                      /// FORM
+                      /// ============================
                       Center(
                         child: SizedBox(
                           width: 470,
@@ -106,6 +300,43 @@ class _AddUserPageState extends State<AddUserPage> {
                           ),
                         ),
                       ),
+
+                      const SizedBox(height: 20),
+
+                      /// ============================
+                      /// FOOTER
+                      /// ============================
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 14,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.black26),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "© 2026 SINDOMON Management System. All rights reserved.",
+                              style: TextStyle(
+                                color: Colors.black26.withValues(alpha: 0.7),
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              "v1.0.0",
+                              style: TextStyle(
+                                color: Colors.amber.withValues(alpha: 0.8),
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -118,50 +349,78 @@ class _AddUserPageState extends State<AddUserPage> {
   }
 
   Widget menu(IconData icon, String title, {bool selected = false}) {
-    return Container(
-      color:
-          selected ? Colors.white.withValues(alpha: 0.15) : Colors.transparent,
-      child: ListTile(
-        leading: Icon(icon, color: Colors.white),
-        title: Text(title, style: const TextStyle(color: Colors.white)),
-        onTap: () {
-          // ScaffoldMessenger.of(
-          //   context,
-          // ).showSnackBar(const SnackBar(content: Text("ListTile diklik")));
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          color: selected ? Colors.amber : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: ListTile(
+          leading: Icon(icon, color: selected ? Colors.black : Colors.white70),
+          title: Text(
+            title,
+            style: TextStyle(
+              color: selected ? Colors.black : Colors.white,
+              fontWeight: selected ? FontWeight.bold : FontWeight.w500,
+            ),
+          ),
+          trailing:
+              selected
+                  ? const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: Colors.black,
+                  )
+                  : null,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          hoverColor: Colors.white10,
+          onTap: () {
+            Widget page;
 
-          // showDialog(
-          //   context: context,
-          //   builder:
-          //       (_) => AlertDialog(
-          //         title: const Text("Informasi"),
-          //         content: Text(title),
-          //       ),
-          // );
-          Widget page;
+            switch (title) {
+              case "Dashboard":
+                page = const DashboardPage();
+                break;
 
-          switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
-              break;
+              case "Pengaturan":
+                page = const AccountSettingPage();
+                break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+              case "Laporan":
+                page = const ReportPage();
+                break;
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
+              case "Senjata":
+                page = const SenjataPage();
+                break;
 
-            case "Pengguna":
-              page = const UserPage();
-              break;
+              case "Satwa":
+                page = const SatwaPage();
+                break;
 
-            default:
-              page = const DashboardPage();
-          }
+              case "Personel":
+                page = const PersonelPage();
+                break;
 
-          Navigator.push(context, MaterialPageRoute(builder: (_) => page));
-        },
+              case "Inventaris":
+                page = const InventarisPage();
+                break;
+
+              case "Pengguna":
+                page = const UserPage();
+                break;
+
+              default:
+                page = const DashboardPage();
+            }
+
+            Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+          },
+        ),
       ),
     );
   }
