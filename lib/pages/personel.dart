@@ -108,7 +108,7 @@ class _PersonelPageState extends State<PersonelPage> {
                     const SizedBox(height: 5),
 
                     Text(
-                      "Management Personel",
+                      "Management System",
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.6),
                         fontSize: 13,
