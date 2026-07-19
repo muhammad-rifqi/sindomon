@@ -38,24 +38,17 @@ class _LoginCardState extends State<LoginCard> {
           "password": passwordController.text,
         }),
       );
-
       debugPrint(response.statusCode.toString());
       debugPrint(response.body);
-
       if (!mounted) return;
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        // Kalau API mengembalikan token
         String token = data["jwt_token"];
-
         debugPrint(token);
-
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (_) => const DashboardPage()),
-        // );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const DashboardPage()),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Login gagal: ${response.body}")),
