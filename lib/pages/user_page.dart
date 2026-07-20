@@ -5,6 +5,8 @@ import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
 import 'dart:ui';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -14,38 +16,41 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  final List<Map<String, dynamic>> users = [
-    {
-      "username": "123456 / Bripda Ahmad Fauzi",
-      "role": "Operator Kewilayahan",
-      "polda": "Polda Metro Jaya",
-      "status": true,
-    },
-    {
-      "username": "654321 / AKP Siti Rahmawati",
-      "role": "Eksekutif Pimpinan",
-      "polda": "Polda Jawa Barat",
-      "status": true,
-    },
-    {
-      "username": "789012 / Iptu Budi Santoso",
-      "role": "Operator Kewilayahan",
-      "polda": "Polda Jawa Tengah",
-      "status": false,
-    },
-    {
-      "username": "345678 / Kompol Dewi Lestari",
-      "role": "Eksekutif Pimpinan",
-      "polda": "Polda Jawa Timur",
-      "status": true,
-    },
-    {
-      "username": "901234 / Ipda Eko Prasetyo",
-      "role": "Operator Kewilayahan",
-      "polda": "Polda Bali",
-      "status": true,
-    },
-  ];
+  List<Map<String, dynamic>> users = [];
+  bool isLoading = true;
+
+  Future<void> getUsers() async {
+    try {
+      final response = await http.get(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/user"),
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+
+        setState(() {
+          users = List<Map<String, dynamic>>.from(json["data"]);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUsers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +124,7 @@ class _UserPageState extends State<UserPage> {
                           menu(Icons.dashboard_rounded, "Dashboard"),
                           menu(Icons.description_rounded, "Laporan"),
                           menu(Icons.map_rounded, "Wilayah"),
-                          menu(Icons.inventory_2_rounded,"Inventaris"),
+                          menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
                           menu(Icons.gavel_rounded, "Senjata Api"),
@@ -129,7 +134,11 @@ class _UserPageState extends State<UserPage> {
                           menu(Icons.badge_rounded, "Personel"),
                           menu(Icons.inventory_rounded, "Stok Amunisi"),
                           menu(Icons.memory_rounded, "Perangkat"),
-                          menu(Icons.people_alt_rounded, "Pengguna",selected: true,),
+                          menu(
+                            Icons.people_alt_rounded,
+                            "Pengguna",
+                            selected: true,
+                          ),
                         ],
                       ),
                     ),
@@ -459,21 +468,17 @@ class _UserPageState extends State<UserPage> {
                                                     (e) => DataRow(
                                                       cells: [
                                                         DataCell(
-                                                          Text(e["username"]),
+                                                          Text(e["username"] ?? ' - '),
+                                                        ),
+                                                        DataCell(
+                                                          Text("${e["roles_id"]}"),
+                                                        ),
+                                                        DataCell(
+                                                          Text("${e["polda"] ?? ' - '}"),
                                                         ),
                                                         DataCell(
                                                           Text(
-                                                            "${e["role"]}",
-                                                          ),
-                                                        ),
-                                                        DataCell(
-                                                          Text(
-                                                            "${e["polda"]}",
-                                                          ),
-                                                        ),
-                                                        DataCell(
-                                                          Text(
-                                                            "${e["status"]}",
+                                                            "${e["status"] ?? ' - '}",
                                                           ),
                                                         ),
                                                         DataCell(
@@ -563,7 +568,7 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-Widget menu(IconData icon, String title, {bool selected = false}) {
+  Widget menu(IconData icon, String title, {bool selected = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: AnimatedContainer(
