@@ -17,25 +17,25 @@ class SenjataPage extends StatefulWidget {
 }
 
 class _SenjataPageState extends State<SenjataPage> {
-  List<Map<String, dynamic>> senjataapi= [];
+  List<Map<String, dynamic>> senjataapi = [];
   bool isLoading = true;
 
- Future<void> getSenjataApi() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString("token");
-
+  Future<void> getSenjataApi() async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+      
+      // print("ini token ${token}");
       final response = await http.get(
         Uri.parse("https://sindomon.yoknusantara.com/api/v1/senjata"),
         headers: {
-           "Content-Type": "application/json",
-            "Authorization": "$token",
-        }
+          "authorization": token.toString(),
+        },
       );
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-
+        // print("ini json ${json}");
         setState(() {
           senjataapi = List<Map<String, dynamic>>.from(json["data"]);
           isLoading = false;
@@ -59,7 +59,6 @@ class _SenjataPageState extends State<SenjataPage> {
     super.initState();
     getSenjataApi();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +190,10 @@ class _SenjataPageState extends State<SenjataPage> {
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 18,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25),
                                 color: Colors.white.withValues(alpha: 0.18),
@@ -208,144 +210,168 @@ class _SenjataPageState extends State<SenjataPage> {
                                 ],
                               ),
                               child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.amber.withValues(alpha: 0.2),
-                                              borderRadius: BorderRadius.circular(15),
-                                            ),
-                                            child: const Icon(
-                                              Icons.home_rounded,
-                                              color: Colors.amber,
-                                              size: 28,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.amber.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: const Icon(
+                                      Icons.home_rounded,
+                                      color: Colors.amber,
+                                      size: 28,
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 15),
+
+                                  // Breadcrumb
+                                  const Expanded(
+                                    flex: 3,
+                                    child: Text(
+                                      "Dashboard / Inventaris / Senjata Api",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 20),
+
+                                  // Search
+                                  SizedBox(
+                                    width: 250,
+                                    height: 45,
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        hintText: "Cari Menu...",
+                                        hintStyle: const TextStyle(
+                                          color: Colors.black54,
+                                        ),
+                                        prefixIcon: const Icon(
+                                          Icons.search,
+                                          color: Colors.black54,
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white.withValues(
+                                          alpha: 0.15,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
+                                          borderSide: BorderSide(
+                                            color: Colors.white.withValues(
+                                              alpha: 0.3,
                                             ),
                                           ),
-
-                                          const SizedBox(width: 15),
-
-                                          // Breadcrumb
-                                          const Expanded(
-                                            flex: 3,
-                                            child: Text(
-                                              "Dashboard / Inventaris / Senjata Api",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                color: Colors.black87,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30,
+                                          ),
+                                          borderSide: BorderSide(
+                                            color: Colors.white.withValues(
+                                              alpha: 0.3,
                                             ),
                                           ),
-
-                                          const SizedBox(width: 20),
-
-                                          // Search
-                                          SizedBox(
-                                            width: 250,
-                                            height: 45,
-                                            child: TextField(
-                                              decoration: InputDecoration(
-                                                hintText: "Cari Menu...",
-                                                hintStyle: const TextStyle(color: Colors.black54),
-                                                prefixIcon: const Icon(
-                                                  Icons.search,
-                                                  color: Colors.black54,
-                                                ),
-                                                filled: true,
-                                                fillColor: Colors.white.withValues(alpha:0.15),
-                                                border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(30),
-                                                  borderSide: BorderSide(
-                                                    color: Colors.white.withValues(alpha: 0.3),
-                                                  ),
-                                                ),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(30),
-                                                  borderSide: BorderSide(
-                                                    color: Colors.white.withValues(alpha: 0.3),
-                                                  ),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(30),
-                                                  borderSide: const BorderSide(
-                                                    color: Colors.amber,
-                                                  ),
-                                                ),
-                                                contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                                              ),
-                                            ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            30,
                                           ),
-
-                                          const SizedBox(width: 20),
-
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white.withValues(alpha:0.15),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: IconButton(
-                                              onPressed: () {},
-                                              icon: const Icon(
-                                                Icons.notifications_none,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
+                                          borderSide: const BorderSide(
+                                            color: Colors.amber,
                                           ),
-
-                                          const SizedBox(width: 15),
-
-                                          Container(
-                                            padding: const EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Colors.white.withValues(alpha: 0.5),
-                                                width: 2,
-                                              ),
+                                        ),
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              vertical: 12,
                                             ),
-                                            child: const CircleAvatar(
-                                              radius: 20,
-                                              backgroundColor: Colors.amber,
-                                              child: Icon(
-                                                Icons.person,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
+                                      ),
+                                    ),
+                                  ),
 
-                                          const SizedBox(width: 10),
+                                  const SizedBox(width: 20),
 
-                                          // Jangan pakai Expanded di sini
-                                          const Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Administrator",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                  height: 1.2,
-                                                ),
-                                              ),
-                                              Text(
-                                                "Super Admin",
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.black54,
-                                                  height: 1.2,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      )
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.15,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.notifications_none,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 15),
+
+                                  Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.5,
+                                        ),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: const CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Colors.amber,
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 10),
+
+                                  // Jangan pakai Expanded di sini
+                                  const Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Administrator",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                          height: 1.2,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Super Admin",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black54,
+                                          height: 1.2,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        )
+                        ),
                       ),
 
                       const SizedBox(height: 25),
@@ -403,9 +429,9 @@ class _SenjataPageState extends State<SenjataPage> {
                           fillColor: Colors.white10,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide( 
-                                color: Colors.white,
-                                width: 1.5,
+                            borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 1.5,
                             ),
                           ),
                         ),
@@ -440,51 +466,63 @@ class _SenjataPageState extends State<SenjataPage> {
                                           ),
                                           columns: const [
                                             DataColumn(
-                                                label: Text("Foto Unit")),
+                                              label: Text("Foto Unit"),
+                                            ),
                                             DataColumn(label: Text("No Seri")),
                                             DataColumn(label: Text("Kategori")),
                                             DataColumn(label: Text("Tahun")),
                                             DataColumn(label: Text("AKSI")),
                                           ],
-                                          rows: senjataapi
-                                              .map(
-                                                (e) => DataRow(
-                                                  cells: [
-                                                    DataCell(
-                                                      Image.asset(
-                                                        "assets/images/pistol.png",
-                                                        width: 100,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                    DataCell(
-                                                        Text(e["no_seri"])),
-                                                    DataCell(
-                                                        Text(e["kategori"])),
-                                                    DataCell(
-                                                        Text("${e["tahun"]}")),
-                                                    DataCell(
-                                                      Row(
-                                                        children: [
-                                                          IconButton(
-                                                            icon: const Icon(
-                                                                Icons.edit),
-                                                            onPressed: () {},
+                                          rows:
+                                              senjataapi
+                                                  .map(
+                                                    (e) => DataRow(
+                                                      cells: [
+                                                        DataCell(
+                                                          Image.asset(
+                                                            "assets/images/pistol.png",
+                                                            width: 100,
+                                                            fit: BoxFit.cover,
                                                           ),
-                                                          IconButton(
-                                                            icon: const Icon(
-                                                              Icons.delete,
-                                                              color: Colors.red,
-                                                            ),
-                                                            onPressed: () {},
+                                                        ),
+                                                        DataCell(
+                                                          Text(e["no_seri"]),
+                                                        ),
+                                                        DataCell(
+                                                          Text(e["kategori"]),
+                                                        ),
+                                                        DataCell(
+                                                          Text("${e["tahun"]}"),
+                                                        ),
+                                                        DataCell(
+                                                          Row(
+                                                            children: [
+                                                              IconButton(
+                                                                icon:
+                                                                    const Icon(
+                                                                      Icons
+                                                                          .edit,
+                                                                    ),
+                                                                onPressed:
+                                                                    () {},
+                                                              ),
+                                                              IconButton(
+                                                                icon: const Icon(
+                                                                  Icons.delete,
+                                                                  color:
+                                                                      Colors
+                                                                          .red,
+                                                                ),
+                                                                onPressed:
+                                                                    () {},
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              )
-                                              .toList(),
+                                                  )
+                                                  .toList(),
                                         ),
                                       ),
                                     ),
@@ -561,13 +599,14 @@ class _SenjataPageState extends State<SenjataPage> {
               fontWeight: selected ? FontWeight.bold : FontWeight.w500,
             ),
           ),
-          trailing: selected
-              ? const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 14,
-                  color: Colors.black,
-                )
-              : null,
+          trailing:
+              selected
+                  ? const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: Colors.black,
+                  )
+                  : null,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),
