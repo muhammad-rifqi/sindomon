@@ -5,6 +5,9 @@ import '../pages/dashboard.dart';
 import '../pages/report.dart';
 import '../pages/add_senjata.dart';
 import 'dart:ui';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SenjataPage extends StatefulWidget {
   const SenjataPage({super.key});
@@ -14,38 +17,49 @@ class SenjataPage extends StatefulWidget {
 }
 
 class _SenjataPageState extends State<SenjataPage> {
-  final List<Map<String, dynamic>> senjataapi = [
-    {
-      "foto_unit": "",
-      "no_seri": "1111234567",
-      "kategori": "Senjata",
-      "tahun": 2023,
-    },
-    {
-      "foto_unit": "",
-      "no_seri": "1111234567",
-      "kategori": "Senjata",
-      "tahun": 2023,
-    },
-    {
-      "foto_unit": "",
-      "no_seri": "1111234567",
-      "kategori": "Senjata",
-      "tahun": 2023,
-    },
-    {
-      "foto_unit": "",
-      "no_seri": "1111234567",
-      "kategori": "Senjata",
-      "tahun": 2023,
-    },
-    {
-      "foto_unit": "",
-      "no_seri": "1111234567",
-      "kategori": "Senjata",
-      "tahun": 2023,
-    },
-  ];
+  List<Map<String, dynamic>> senjataapi= [];
+  bool isLoading = true;
+
+ Future<void> getSenjataApi() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+
+    try {
+      final response = await http.get(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/senjata"),
+        headers: {
+           "Content-Type": "application/json",
+            "Authorization": "$token",
+        }
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+
+        setState(() {
+          senjataapi = List<Map<String, dynamic>>.from(json["data"]);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSenjataApi();
+  }
+
 
   @override
   Widget build(BuildContext context) {

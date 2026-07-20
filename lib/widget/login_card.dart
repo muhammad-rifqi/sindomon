@@ -3,6 +3,7 @@ import '../widget/textfield.dart';
 import '../pages/dashboard.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginCard extends StatefulWidget {
   const LoginCard({super.key});
@@ -38,18 +39,20 @@ class _LoginCardState extends State<LoginCard> {
           "password": passwordController.text,
         }),
       );
-      debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
-      if (!mounted) return;
+    
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         String token = data["jwt_token"];
-        debugPrint(token);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString("token", token);
+     
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const DashboardPage()),
         );
       } else {
+         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Login gagal: ${response.body}")),
         );
