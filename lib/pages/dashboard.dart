@@ -7,6 +7,8 @@ import '../pages/satwa.dart';
 import '../pages/senjata.dart';
 import '../pages/personel.dart';
 import '../pages/inventaris.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -16,6 +18,25 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  final provinsi = [
+    {"nama": "Aceh", "lat": 5.5483, "lng": 95.3238},
+    {"nama": "Sumatera Utara", "lat": 3.5952, "lng": 98.6722},
+    {"nama": "Sumatera Barat", "lat": -0.9471, "lng": 100.4172},
+    {"nama": "Riau", "lat": 0.5071, "lng": 101.4478},
+    {"nama": "DKI Jakarta", "lat": -6.2088, "lng": 106.8456},
+    {"nama": "Jawa Barat", "lat": -6.9175, "lng": 107.6191},
+    {"nama": "Jawa Tengah", "lat": -6.9667, "lng": 110.4167},
+    {"nama": "DI Yogyakarta", "lat": -7.7956, "lng": 110.3695},
+    {"nama": "Jawa Timur", "lat": -7.2575, "lng": 112.7521},
+    {"nama": "Bali", "lat": -8.6705, "lng": 115.2126},
+    {"nama": "NTB", "lat": -8.5833, "lng": 116.1167},
+    {"nama": "NTT", "lat": -10.1772, "lng": 123.6070},
+    {"nama": "Kalimantan Timur", "lat": -0.5022, "lng": 117.1537},
+    {"nama": "Sulawesi Selatan", "lat": -5.1477, "lng": 119.4327},
+    {"nama": "Maluku", "lat": -3.6954, "lng": 128.1814},
+    {"nama": "Papua", "lat": -2.5337, "lng": 140.7181},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,17 +148,108 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Stack(
                   children: [
                     /// Background Map
+                    /// Background Map
                     Positioned.fill(
-                      child: Image.asset(
-                        "assets/images/background.png",
-                        fit: BoxFit.cover,
+                      child: FlutterMap(
+                        options: const MapOptions(
+                          initialCenter: LatLng(-2.5, 118.0),
+                          initialZoom: 4.3,
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                            userAgentPackageName: 'com.sindomon.app',
+                          ),
+
+                          MarkerLayer(
+                            markers:
+                                provinsi.map((p) {
+                                  return Marker(
+                                    point: LatLng(
+                                      p["lat"] as double,
+                                      p["lng"] as double,
+                                    ),
+
+                                    width: 50,
+                                    height: 50,
+
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              backgroundColor: const Color(
+                                                0xff1E1B4B,
+                                              ),
+
+                                              title: Text(
+                                                p["nama"] as String,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+
+                                              content: const Text(
+                                                "DATA WILAYAH\n\n"
+                                                "👮 Personel : 2.450\n"
+                                                "📦 Inventaris : 1.200\n"
+                                                "🔫 Senjata : 500\n"
+                                                "🐕 Satwa : 25\n\n"
+                                                "STATUS : AKTIF",
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+
+                                                  child: const Text(
+                                                    "Tutup",
+                                                    style: TextStyle(
+                                                      color: Colors.amber,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+
+                                      child: Tooltip(
+                                        message: p["nama"] as String,
+
+                                        child: const Icon(
+                                          Icons.location_on,
+                                          color: Colors.red,
+                                          size: 40,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                          ),
+                        ],
                       ),
                     ),
 
-                    /// Overlay agar sedikit gelap
+                    /// Overlay gelap
                     Positioned.fill(
-                      child: Container(
-                        color: Colors.black.withValues(alpha: 0.20),
+                      child: IgnorePointer(
+                        ignoring: true,
+                        child: Container(
+                          color: Colors.black.withValues(alpha: 0.20),
+                        ),
                       ),
                     ),
 
