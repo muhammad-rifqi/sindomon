@@ -3,7 +3,13 @@ import '../widget/background.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
+import '../pages/user_page.dart';
+import '../pages/satwa.dart';
+import '../pages/inventaris.dart';
+import '../pages/polda.dart';
+import '../pages/polres.dart';
 import '../pages/add_senjata.dart';
+import '../pages/personel.dart';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -24,13 +30,11 @@ class _SenjataPageState extends State<SenjataPage> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString("token");
-      
+
       // print("ini token ${token}");
       final response = await http.get(
         Uri.parse("https://sindomon.yoknusantara.com/api/v1/senjata"),
-        headers: {
-          "authorization": token.toString(),
-        },
+        headers: {"authorization": token.toString()},
       );
 
       if (response.statusCode == 200) {
@@ -136,6 +140,8 @@ class _SenjataPageState extends State<SenjataPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
+                          menu(Icons.people_alt_rounded, "Polda"),
+                          menu(Icons.people_alt_rounded, "Polres"),
                           menu(
                             Icons.gavel_rounded,
                             "Senjata Api",
@@ -614,22 +620,50 @@ class _SenjataPageState extends State<SenjataPage> {
           onTap: () {
             Widget page;
 
-            switch (title) {
-              case "Dashboard":
-                page = const DashboardPage();
+           switch (title) {
+            case "Dashboard":
+              page = const DashboardPage();
+              break;
+
+            case "Pengaturan":
+              page = const AccountSettingPage();
+              break;
+
+            case "Laporan":
+              page = const ReportPage();
+              break;
+
+            case "Senjata":
+              page = const SenjataPage();
+              break;
+
+            case "Satwa":
+              page = const SatwaPage();
+              break;
+
+            case "Personel":
+              page = const PersonelPage();
+              break;
+
+            case "Inventaris":
+              page = const InventarisPage();
+              break;
+
+            case "Pengguna":
+              page = const UserPage();
+              break;
+
+            case "Polda":
+                page = const PoldaPage();
                 break;
 
-              case "Pengaturan":
-                page = const AccountSettingPage();
+            case "Polres":
+                page = const PolresPage();
                 break;
 
-              case "Laporan":
-                page = const ReportPage();
-                break;
-
-              default:
-                page = const DashboardPage();
-            }
+            default:
+              page = const DashboardPage();
+          }
 
             Navigator.push(context, MaterialPageRoute(builder: (_) => page));
           },
