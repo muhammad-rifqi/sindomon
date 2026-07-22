@@ -8,30 +8,32 @@ import '../pages/satwa.dart';
 import '../pages/senjata.dart';
 import '../pages/inventaris.dart';
 import '../pages/add_personel_page.dart';
+import '../pages/personel.dart';
+import '../pages/polres.dart';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PersonelPage extends StatefulWidget {
-  const PersonelPage({super.key});
+class PoldaPage extends StatefulWidget {
+  const PoldaPage({super.key});
 
   @override
-  State<PersonelPage> createState() => _PersonelPageState();
+  State<PoldaPage> createState() => _PoldaPageState();
 }
 
-class _PersonelPageState extends State<PersonelPage> {
-  List<Map<String, dynamic>> datapersonel = [];
+class _PoldaPageState extends State<PoldaPage> {
+  List<Map<String, dynamic>> polda = [];
   bool isLoading = true;
 
-  Future<void> getPersonelApi() async {
+  Future<void> getPoldaApi() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString("token");
 
       // print("ini token ${token}");
       final response = await http.get(
-        Uri.parse("https://sindomon.yoknusantara.com/api/v1/personel"),
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/polda"),
         headers: {"authorization": token.toString()},
       );
 
@@ -39,7 +41,7 @@ class _PersonelPageState extends State<PersonelPage> {
         final json = jsonDecode(response.body);
         // print("ini json ${json}");
         setState(() {
-          datapersonel = List<Map<String, dynamic>>.from(json["data"]);
+          polda = List<Map<String, dynamic>>.from(json["data"]);
           isLoading = false;
         });
       } else {
@@ -59,9 +61,8 @@ class _PersonelPageState extends State<PersonelPage> {
   @override
   void initState() {
     super.initState();
-    getPersonelApi();
+    getPoldaApi();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +139,13 @@ class _PersonelPageState extends State<PersonelPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
+                          menu(Icons.people_alt_rounded, "Polda", selected: true),
+                          menu(Icons.people_alt_rounded, "Polres"),
                           menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
-                          menu(Icons.badge_rounded, "Personel", selected: true),
+                          menu(Icons.badge_rounded, "Personel"),
                           menu(Icons.inventory_rounded, "Stok Amunisi"),
                           menu(Icons.memory_rounded, "Perangkat"),
                           menu(Icons.people_alt_rounded, "Pengguna"),
@@ -231,7 +234,7 @@ class _PersonelPageState extends State<PersonelPage> {
                                   const Expanded(
                                     flex: 3,
                                     child: Text(
-                                      "Dashboard / Personel",
+                                      "Dashboard / Polda",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -381,7 +384,7 @@ class _PersonelPageState extends State<PersonelPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Manajemen Personel",
+                            "Manajemen Polda",
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.bold,
@@ -399,7 +402,7 @@ class _PersonelPageState extends State<PersonelPage> {
                               );
                             },
                             icon: const Icon(Icons.add),
-                            label: const Text("Tambah Personel"),
+                            label: const Text("Tambah Polda"),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.amber,
                               foregroundColor: Colors.black,
@@ -421,7 +424,7 @@ class _PersonelPageState extends State<PersonelPage> {
                       /// SEARCH
                       TextField(
                         decoration: InputDecoration(
-                          hintText: "Cari Personel...",
+                          hintText: "Cari Polda...",
                           prefixIcon: const Icon(Icons.search),
                           filled: true,
                           fillColor: Colors.white10,
@@ -463,37 +466,41 @@ class _PersonelPageState extends State<PersonelPage> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                           columns: const [
+                                            DataColumn(label: Text("ID")),
                                             DataColumn(
-                                              label: Text("NRP"),
+                                              label: Text("Nama Polda"),
+                                            ),
+                                            DataColumn(label: Text("Latitude")),
+                                            DataColumn(
+                                              label: Text("Longitude"),
                                             ),
                                             DataColumn(
-                                              label: Text("Nama Lengkap"),
-                                            ),
-                                            DataColumn(label: Text("Polres ID")),
-                                            DataColumn(
-                                              label: Text("Status Aktif"),
+                                              label: Text("Created At"),
                                             ),
                                             DataColumn(label: Text("AKSI")),
                                           ],
                                           rows:
-                                              datapersonel
+                                              polda
                                                   .map(
                                                     (e) => DataRow(
                                                       cells: [
+                                                        DataCell(Text(e["id"])),
+                                                        DataCell(
+                                                          Text(e["nama_polda"]),
+                                                        ),
                                                         DataCell(
                                                           Text(
-                                                            e["nrp"],
+                                                            "${e["latitude"]}",
                                                           ),
                                                         ),
                                                         DataCell(
-                                                          Text(e["nama_lengkap"]),
-                                                        ),
-                                                        DataCell(
-                                                          Text("${e["polres_id"]}"),
+                                                          Text(
+                                                            "${e["longitude"]}",
+                                                          ),
                                                         ),
                                                         DataCell(
                                                           Text(
-                                                            "${e["status_aktif"]}",
+                                                            "${e["created_at"]}",
                                                           ),
                                                         ),
                                                         DataCell(
@@ -616,42 +623,50 @@ class _PersonelPageState extends State<PersonelPage> {
           onTap: () {
             Widget page;
 
-             switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
-              break;
+            switch (title) {
+              case "Dashboard":
+                page = const DashboardPage();
+                break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+              case "Pengaturan":
+                page = const AccountSettingPage();
+                break;
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
+              case "Laporan":
+                page = const ReportPage();
+                break;
 
-            case "Senjata":
-              page = const SenjataPage();
-              break;
+              case "Senjata":
+                page = const SenjataPage();
+                break;
 
-            case "Satwa":
-              page = const SatwaPage();
-              break;
+              case "Satwa":
+                page = const SatwaPage();
+                break;
 
-            case "Personel":
-              page = const PersonelPage();
-              break;
+              case "Personel":
+                page = const PersonelPage();
+                break;
 
-            case "Inventaris":
-              page = const InventarisPage();
-              break;
+              case "Inventaris":
+                page = const InventarisPage();
+                break;
 
-            case "Pengguna":
-              page = const UserPage();
-              break;
+              case "Pengguna":
+                page = const UserPage();
+                break;
 
-            default:
-              page = const DashboardPage();
-          }
+              case "Polda":
+                page = const PoldaPage();
+                break;
+
+              case "Polres":
+                page = const PolresPage();
+                break;
+
+              default:
+                page = const DashboardPage();
+            }
 
             Navigator.push(context, MaterialPageRoute(builder: (_) => page));
           },

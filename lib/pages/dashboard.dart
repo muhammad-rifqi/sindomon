@@ -7,6 +7,8 @@ import '../pages/satwa.dart';
 import '../pages/senjata.dart';
 import '../pages/personel.dart';
 import '../pages/inventaris.dart';
+import '../pages/polda.dart';
+import '../pages/polres.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -116,6 +118,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
+                          menu(Icons.people_alt_rounded, "Polda"),
+                          menu(Icons.people_alt_rounded, "Polres"),
                           menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
@@ -479,6 +483,14 @@ class _DashboardPageState extends State<DashboardPage> {
 
               case "Pengguna":
                 page = const UserPage();
+                break;
+
+              case "Polda":
+                page = const PoldaPage();
+                break;
+
+              case "Polres":
+                page = const PolresPage();
                 break;
 
               default:
