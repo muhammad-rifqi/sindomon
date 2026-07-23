@@ -1,69 +1,24 @@
 import 'package:flutter/material.dart';
 import '../widget/background.dart';
+import '../widget/form_input_polda.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
 import '../pages/user_page.dart';
 import '../pages/satwa.dart';
 import '../pages/senjata.dart';
-import '../pages/inventaris.dart';
-import '../pages/add_polda.dart';
 import '../pages/personel.dart';
-import '../pages/polres.dart';
+import '../pages/inventaris.dart';
 import 'dart:ui';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
-class PoldaPage extends StatefulWidget {
-  const PoldaPage({super.key});
+class AddPoldaPage extends StatefulWidget {
+  const AddPoldaPage({super.key});
 
   @override
-  State<PoldaPage> createState() => _PoldaPageState();
+  State<AddPoldaPage> createState() => _AddPoldaPageState();
 }
 
-class _PoldaPageState extends State<PoldaPage> {
-  List<Map<String, dynamic>> polda = [];
-  bool isLoading = true;
-
-  Future<void> getPoldaApi() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString("token");
-
-      // print("ini token ${token}");
-      final response = await http.get(
-        Uri.parse("https://sindomon.yoknusantara.com/api/v1/polda"),
-        headers: {"authorization": token.toString()},
-      );
-
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-        // print("ini json ${json}");
-        setState(() {
-          polda = List<Map<String, dynamic>>.from(json["data"]);
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-
-      debugPrint(e.toString());
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPoldaApi();
-  }
-
+class _AddPoldaPageState extends State<AddPoldaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,7 +125,7 @@ class _PoldaPageState extends State<PoldaPage> {
               /// CONTENT
               /// ========================
               Expanded(
-                child: Padding(
+                child: SingleChildScrollView(
                   padding: const EdgeInsets.all(30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +148,7 @@ class _PoldaPageState extends State<PoldaPage> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
-                                vertical: 18,
+                                vertical: 8,
                               ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25),
@@ -211,7 +166,6 @@ class _PoldaPageState extends State<PoldaPage> {
                                 ],
                               ),
                               child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
                                     padding: const EdgeInsets.all(10),
@@ -230,11 +184,9 @@ class _PoldaPageState extends State<PoldaPage> {
 
                                   const SizedBox(width: 15),
 
-                                  // Breadcrumb
                                   const Expanded(
-                                    flex: 3,
                                     child: Text(
-                                      "Dashboard / Polda",
+                                      "Dashboard / Tambah Personel",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -247,20 +199,13 @@ class _PoldaPageState extends State<PoldaPage> {
 
                                   const SizedBox(width: 20),
 
-                                  // Search
                                   SizedBox(
                                     width: 250,
                                     height: 45,
                                     child: TextField(
                                       decoration: InputDecoration(
                                         hintText: "Cari Menu...",
-                                        hintStyle: const TextStyle(
-                                          color: Colors.black54,
-                                        ),
-                                        prefixIcon: const Icon(
-                                          Icons.search,
-                                          color: Colors.black54,
-                                        ),
+                                        prefixIcon: const Icon(Icons.search),
                                         filled: true,
                                         fillColor: Colors.white.withValues(
                                           alpha: 0.15,
@@ -268,29 +213,6 @@ class _PoldaPageState extends State<PoldaPage> {
                                         border: OutlineInputBorder(
                                           borderRadius: BorderRadius.circular(
                                             30,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: Colors.white.withValues(
-                                              alpha: 0.3,
-                                            ),
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            30,
-                                          ),
-                                          borderSide: BorderSide(
-                                            color: Colors.white.withValues(
-                                              alpha: 0.3,
-                                            ),
-                                          ),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            30,
-                                          ),
-                                          borderSide: const BorderSide(
-                                            color: Colors.amber,
                                           ),
                                         ),
                                         contentPadding:
@@ -314,7 +236,6 @@ class _PoldaPageState extends State<PoldaPage> {
                                       onPressed: () {},
                                       icon: const Icon(
                                         Icons.notifications_none,
-                                        color: Colors.black87,
                                       ),
                                     ),
                                   ),
@@ -344,7 +265,6 @@ class _PoldaPageState extends State<PoldaPage> {
 
                                   const SizedBox(width: 10),
 
-                                  // Jangan pakai Expanded di sini
                                   const Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
@@ -355,7 +275,6 @@ class _PoldaPageState extends State<PoldaPage> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
-                                          height: 1.2,
                                         ),
                                       ),
                                       Text(
@@ -363,7 +282,6 @@ class _PoldaPageState extends State<PoldaPage> {
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black54,
-                                          height: 1.2,
                                         ),
                                       ),
                                     ],
@@ -384,29 +302,20 @@ class _PoldaPageState extends State<PoldaPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Manajemen Polda",
+                            "Pengaturan Personel",
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black,
                             ),
                           ),
 
                           ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const AddPoldaPage(),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text("Tambah Polda"),
+                            onPressed: () => Navigator.pop(context),
+                            icon: const Icon(Icons.arrow_back),
+                            label: const Text("Kembali"),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.amber,
-                              foregroundColor: Colors.black,
-                              elevation: 5,
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 22,
                                 vertical: 18,
@@ -419,125 +328,22 @@ class _PoldaPageState extends State<PoldaPage> {
                         ],
                       ),
 
-                      const SizedBox(height: 20),
-
-                      /// SEARCH
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: "Cari Polda...",
-                          prefixIcon: const Icon(Icons.search),
-                          filled: true,
-                          fillColor: Colors.white10,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 1.5,
-                            ),
-                          ),
-                        ),
-                      ),
-
                       const SizedBox(height: 25),
 
-                      /// TABLE DATA
-                      Expanded(
+                      /// ============================
+                      /// FORM
+                      /// ============================
+                      Center(
                         child: SizedBox(
-                          width: double.infinity,
+                          width: 470,
                           child: Card(
-                            elevation: 3,
+                            elevation: 8,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          minWidth: constraints.maxWidth,
-                                        ),
-                                        child: DataTable(
-                                          headingTextStyle: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          columns: const [
-                                            DataColumn(label: Text("ID")),
-                                            DataColumn(
-                                              label: Text("Nama Polda"),
-                                            ),
-                                            DataColumn(label: Text("Latitude")),
-                                            DataColumn(
-                                              label: Text("Longitude"),
-                                            ),
-                                            DataColumn(
-                                              label: Text("Created At"),
-                                            ),
-                                            DataColumn(label: Text("AKSI")),
-                                          ],
-                                          rows:
-                                              polda
-                                                  .map(
-                                                    (e) => DataRow(
-                                                      cells: [
-                                                        DataCell(Text(e["id"])),
-                                                        DataCell(
-                                                          Text(e["nama_polda"]),
-                                                        ),
-                                                        DataCell(
-                                                          Text(
-                                                            "${e["latitude"]}",
-                                                          ),
-                                                        ),
-                                                        DataCell(
-                                                          Text(
-                                                            "${e["longitude"]}",
-                                                          ),
-                                                        ),
-                                                        DataCell(
-                                                          Text(
-                                                            "${e["created_at"]}",
-                                                          ),
-                                                        ),
-                                                        DataCell(
-                                                          Row(
-                                                            children: [
-                                                              IconButton(
-                                                                icon:
-                                                                    const Icon(
-                                                                      Icons
-                                                                          .edit,
-                                                                    ),
-                                                                onPressed:
-                                                                    () {},
-                                                              ),
-                                                              IconButton(
-                                                                icon: const Icon(
-                                                                  Icons.delete,
-                                                                  color:
-                                                                      Colors
-                                                                          .red,
-                                                                ),
-                                                                onPressed:
-                                                                    () {},
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                  .toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(25),
+                              child: FormTambahPolda(),
                             ),
                           ),
                         ),
@@ -654,14 +460,6 @@ class _PoldaPageState extends State<PoldaPage> {
 
               case "Pengguna":
                 page = const UserPage();
-                break;
-
-              case "Polda":
-                page = const PoldaPage();
-                break;
-
-              case "Polres":
-                page = const PolresPage();
                 break;
 
               default:
