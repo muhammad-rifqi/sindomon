@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormTambahPolda extends StatefulWidget {
   const FormTambahPolda({super.key});
@@ -9,12 +12,70 @@ class FormTambahPolda extends StatefulWidget {
 
 class _FormTambahPoldaState extends State<FormTambahPolda> {
   String? pangkat;
-
   final namaPolda = TextEditingController();
-
   final lat = TextEditingController();
-
   final long = TextEditingController();
+  bool loading = false;
+
+
+  Future<void> simpanPolda() async {
+    if (namaPolda.text.isEmpty || lat.text.isEmpty || long.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Semua data wajib diisi")));
+
+      return;
+    }
+
+    setState(() {
+      loading = true;
+    });
+
+    try {
+      
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      final response = await http.post(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/polda"),
+        headers: {"authorization": token.toString()},
+
+        body: jsonEncode({
+          "nama_polda": namaPolda.text,
+          "latitude": lat.text,
+          "longitude": long.text,
+        }),
+      );
+
+      if (!mounted) return;
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Data Polda berhasil disimpan")),
+        );
+
+        namaPolda.clear();
+        lat.clear();
+        long.clear();
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Gagal: ${response.body}")));
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    } finally {
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +114,10 @@ class _FormTambahPoldaState extends State<FormTambahPolda> {
 
         const SizedBox(height: 20),
 
-        const Text("Longitude *", style: TextStyle(fontWeight: FontWeight.bold)),
+        const Text(
+          "Longitude *",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
 
         TextFormField(
           controller: long,
@@ -70,7 +134,7 @@ class _FormTambahPoldaState extends State<FormTambahPolda> {
               backgroundColor: Colors.amber,
               foregroundColor: Colors.black,
             ),
-            onPressed: () {},
+            onPressed: () {simpanPolda();},
             child: const Text("Simpan Data", style: TextStyle(fontSize: 18)),
           ),
         ),
