@@ -7,7 +7,7 @@ import '../pages/user_page.dart';
 import '../pages/satwa.dart';
 import '../pages/senjata.dart';
 import '../pages/inventaris.dart';
-import '../pages/add_personel_page.dart';
+import '../pages/add_polres.dart';
 import '../pages/personel.dart';
 import '../pages/polda.dart';
 import 'dart:ui';
@@ -384,7 +384,7 @@ class _PolresPageState extends State<PolresPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Manajemen Polda",
+                            "Manajemen Polres",
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.bold,
@@ -397,7 +397,7 @@ class _PolresPageState extends State<PolresPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const AddPersonelPage(),
+                                  builder: (_) => const AddPolresPage(),
                                 ),
                               );
                             },

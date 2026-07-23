@@ -8,6 +8,7 @@ import '../pages/user_page.dart';
 import '../pages/satwa.dart';
 import '../pages/senjata.dart';
 import '../pages/personel.dart';
+import '../pages/polres.dart';
 import '../pages/inventaris.dart';
 import 'dart:ui';
 
@@ -186,7 +187,7 @@ class _AddPoldaPageState extends State<AddPoldaPage> {
 
                                   const Expanded(
                                     child: Text(
-                                      "Dashboard / Tambah Personel",
+                                      "Dashboard / Tambah Polda",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -462,6 +463,10 @@ class _AddPoldaPageState extends State<AddPoldaPage> {
                 page = const UserPage();
                 break;
 
+              case "Polres":
+                page = const PolresPage();
+                break;
+                
               default:
                 page = const DashboardPage();
             }

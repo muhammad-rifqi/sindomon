@@ -8,6 +8,7 @@ import '../pages/user_page.dart';
 import '../pages/satwa.dart';
 import '../pages/senjata.dart';
 import '../pages/personel.dart';
+import '../pages/polda.dart';
 import '../pages/inventaris.dart';
 import 'dart:ui';
 
@@ -95,7 +96,11 @@ class _AddPolresPageState extends State<AddPolresPage> {
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
                           menu(Icons.people_alt_rounded, "Polda"),
-                          menu(Icons.people_alt_rounded, "Polres", selected: true),
+                          menu(
+                            Icons.people_alt_rounded,
+                            "Polres",
+                            selected: true,
+                          ),
                           menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
@@ -462,6 +467,9 @@ class _AddPolresPageState extends State<AddPolresPage> {
                 page = const UserPage();
                 break;
 
+              case "Polda":
+                page = const PoldaPage();
+                break;
               default:
                 page = const DashboardPage();
             }
