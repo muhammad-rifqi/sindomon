@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormTambahSenjata extends StatefulWidget {
   const FormTambahSenjata({super.key});
@@ -32,7 +33,7 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
     {"id": 3, "namaKat": "Kat3"},
   ];
 
-  String kategori = "Pistol";
+  // String kategori = "Pistol";
   String statusKelayakan = "Layak";
 
   Future<void> _showPicker() async {
@@ -76,15 +77,20 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
     }
 
     final data = {
+      "polda_id" : selectedPoldaId,
       "no_seri": noSeri.text,
-      "kategori": kategori,
+      "kategori": selectedKatId,
       "tahun_pengadaan": tahunPengadaan.text,
       "status_kelayakan": statusKelayakan,
       "foto": base64Image,
     };
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+
     final response = await http.post(
-      Uri.parse("http://localhost/api/tambah_senjata.php"),
-      headers: {"Content-Type": "application/json"},
+      Uri.parse("https://sindomon.yoknusantara.com/api/v1/senjata"),
+      headers: {"authorization": token.toString()},
       body: jsonEncode(data),
     );
 
