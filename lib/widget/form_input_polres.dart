@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormTambahPolres extends StatefulWidget {
   const FormTambahPolres({super.key});
@@ -12,12 +15,70 @@ class _FormTambahPolresState extends State<FormTambahPolres> {
   int? selectedPoldaId;
 
   final List<Map<String, dynamic>> daftarPolda = [
-    {"id": 1, "namaPolda": "Polda Metro Jaya"},
+    {"id": 1, "namaPolda": "Polda Aceh"},
     {"id": 2, "namaPolda": "Polda Jawa Barat"},
     {"id": 3, "namaPolda": "Polda Jawa Tengah"},
   ];
 
+  bool loading = false;
   final namaPolres = TextEditingController();
+
+  Future<void> simpanPolres() async {
+    if (selectedPoldaId == null || namaPolres.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Semua data wajib diisi")));
+
+      return;
+    }
+
+    setState(() {
+      loading = true;
+    });
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      final response = await http.post(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/polres"),
+        headers: {"authorization": token.toString()},
+
+        body: jsonEncode({
+          "polda_id": selectedPoldaId,
+          "nama_polres": namaPolres.text,
+        }),
+      );
+
+      if (!mounted) return;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Data Polres berhasil disimpan")),
+        );
+
+        setState(() {
+          selectedPoldaId = null;
+        });
+        namaPolres.clear();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Gagal menyimpan: ${response.body}")),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+    } finally {
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +108,8 @@ class _FormTambahPolresState extends State<FormTambahPolres> {
           items:
               daftarPolda.map((polda) {
                 return DropdownMenuItem<int>(
-                  value: polda["id"], 
-                  child: Text(polda["namaPolda"]), 
+                  value: polda["id"],
+                  child: Text(polda["namaPolda"]),
                 );
               }).toList(),
           onChanged: (value) {
@@ -79,10 +140,10 @@ class _FormTambahPolresState extends State<FormTambahPolres> {
           height: 50,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
-              foregroundColor: Colors.black,
+              backgroundColor:  Colors.blue,
+              foregroundColor: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () { simpanPolres(); },
             child: const Text("Simpan Data", style: TextStyle(fontSize: 18)),
           ),
         ),

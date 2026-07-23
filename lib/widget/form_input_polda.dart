@@ -131,8 +131,8 @@ class _FormTambahPoldaState extends State<FormTambahPolda> {
           height: 50,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
-              foregroundColor: Colors.black,
+              backgroundColor:  Colors.blue,
+              foregroundColor: Colors.white,
             ),
             onPressed: () {simpanPolda();},
             child: const Text("Simpan Data", style: TextStyle(fontSize: 18)),
