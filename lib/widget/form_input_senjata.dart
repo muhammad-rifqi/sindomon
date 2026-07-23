@@ -17,6 +17,21 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
   final ImagePicker _picker = ImagePicker();
   Uint8List? _imageBytes;
 
+  int? selectedPoldaId;
+  int? selectedKatId;
+
+  final List<Map<String, dynamic>> daftarPolda = [
+    {"id": 1, "namaPolda": "Polda Aceh"},
+    {"id": 2, "namaPolda": "Polda Jawa Barat"},
+    {"id": 3, "namaPolda": "Polda Jawa Tengah"},
+  ];
+
+  final List<Map<String, dynamic>> daftarKategori = [
+    {"id": 1, "namaKat": "Kat1"},
+    {"id": 2, "namaKat": "Kat2"},
+    {"id": 3, "namaKat": "Kat3"},
+  ];
+
   String kategori = "Pistol";
   String statusKelayakan = "Layak";
 
@@ -68,14 +83,12 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
       "foto": base64Image,
     };
     final response = await http.post(
-    Uri.parse("http://localhost/api/tambah_senjata.php"),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: jsonEncode(data),
-  );
+      Uri.parse("http://localhost/api/tambah_senjata.php"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(data),
+    );
 
-  print(response.body);
+    print(response.body);
   }
 
   @override
@@ -87,6 +100,28 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
           const Text(
             "TAMBAH DATA SENJATA",
             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          ),
+
+          const SizedBox(height: 25),
+
+          DropdownButtonFormField<int>(
+            value: selectedPoldaId,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "Pilih Polda",
+            ),
+            items:
+                daftarPolda.map((polda) {
+                  return DropdownMenuItem<int>(
+                    value: polda["id"],
+                    child: Text(polda["namaPolda"]),
+                  );
+                }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedPoldaId = value;
+              });
+            },
           ),
 
           const SizedBox(height: 25),
@@ -117,24 +152,22 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
 
           const SizedBox(height: 8),
 
-          DropdownButtonFormField<String>(
-            value: kategori,
-            decoration: const InputDecoration(border: OutlineInputBorder()),
-            items: const [
-              DropdownMenuItem(value: "Pistol", child: Text("Pistol")),
-              DropdownMenuItem(value: "Revolver", child: Text("Revolver")),
-              DropdownMenuItem(
-                value: "Senapan Serbu",
-                child: Text("Senapan Serbu"),
-              ),
-              DropdownMenuItem(
-                value: "Senapan Laras Panjang",
-                child: Text("Senapan Laras Panjang"),
-              ),
-            ],
+          DropdownButtonFormField<int>(
+            value: selectedKatId,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "Pilih Kategori Senjata",
+            ),
+            items:
+                daftarKategori.map((cat) {
+                  return DropdownMenuItem<int>(
+                    value: cat["id"],
+                    child: Text(cat["namaKat"]),
+                  );
+                }).toList(),
             onChanged: (value) {
               setState(() {
-                kategori = value!;
+                selectedKatId = value;
               });
             },
           ),
