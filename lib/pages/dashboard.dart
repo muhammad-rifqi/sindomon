@@ -11,6 +11,9 @@ import '../pages/polda.dart';
 import '../pages/polres.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -20,24 +23,46 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final provinsi = [
-    {"nama": "Aceh", "lat": 5.5483, "lng": 95.3238},
-    {"nama": "Sumatera Utara", "lat": 3.5952, "lng": 98.6722},
-    {"nama": "Sumatera Barat", "lat": -0.9471, "lng": 100.4172},
-    {"nama": "Riau", "lat": 0.5071, "lng": 101.4478},
-    {"nama": "DKI Jakarta", "lat": -6.2088, "lng": 106.8456},
-    {"nama": "Jawa Barat", "lat": -6.9175, "lng": 107.6191},
-    {"nama": "Jawa Tengah", "lat": -6.9667, "lng": 110.4167},
-    {"nama": "DI Yogyakarta", "lat": -7.7956, "lng": 110.3695},
-    {"nama": "Jawa Timur", "lat": -7.2575, "lng": 112.7521},
-    {"nama": "Bali", "lat": -8.6705, "lng": 115.2126},
-    {"nama": "NTB", "lat": -8.5833, "lng": 116.1167},
-    {"nama": "NTT", "lat": -10.1772, "lng": 123.6070},
-    {"nama": "Kalimantan Timur", "lat": -0.5022, "lng": 117.1537},
-    {"nama": "Sulawesi Selatan", "lat": -5.1477, "lng": 119.4327},
-    {"nama": "Maluku", "lat": -3.6954, "lng": 128.1814},
-    {"nama": "Papua", "lat": -2.5337, "lng": 140.7181},
-  ];
+  List<Map<String, dynamic>> provinsi = [];
+  bool isLoading = true;
+
+  Future<void> getPoldaApi() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      // print("ini token ${token}");
+      final response = await http.get(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/polda"),
+        headers: {"authorization": token.toString()},
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        // print("ini json ${json}");
+        setState(() {
+          provinsi = List<Map<String, dynamic>>.from(json["data"]);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+
+      debugPrint(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPoldaApi();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,8 +196,14 @@ class _DashboardPageState extends State<DashboardPage> {
                                 provinsi.map((p) {
                                   return Marker(
                                     point: LatLng(
-                                      p["lat"] as double,
-                                      p["lng"] as double,
+                                      double.tryParse(
+                                            p["latitude"].toString(),
+                                          ) ??
+                                          0.0,
+                                      double.tryParse(
+                                            p["longitude"].toString(),
+                                          ) ??
+                                          0.0,
                                     ),
 
                                     width: 50,
@@ -191,7 +222,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                               ),
 
                                               title: Text(
-                                                p["nama"] as String,
+                                                p["nama_polda"] as String,
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
@@ -231,7 +262,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       },
 
                                       child: Tooltip(
-                                        message: p["nama"] as String,
+                                        message: p["nama_polda"] as String,
 
                                         child: const Icon(
                                           Icons.location_on,

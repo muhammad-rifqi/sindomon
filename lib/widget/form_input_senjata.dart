@@ -91,7 +91,7 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
       body: jsonEncode(data),
     );
 
-    print(response.body);
+    debugPrint(response.body);
   }
 
   @override
