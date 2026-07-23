@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class FormTambahSenjata extends StatefulWidget {
   const FormTambahSenjata({super.key});
@@ -49,6 +51,31 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
         );
       },
     );
+  }
+
+  Future<void> submitData() async {
+    String? base64Image;
+
+    if (_imageBytes != null) {
+      base64Image = base64Encode(_imageBytes!);
+    }
+
+    final data = {
+      "no_seri": noSeri.text,
+      "kategori": kategori,
+      "tahun_pengadaan": tahunPengadaan.text,
+      "status_kelayakan": statusKelayakan,
+      "foto": base64Image,
+    };
+    final response = await http.post(
+    Uri.parse("http://localhost/api/tambah_senjata.php"),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: jsonEncode(data),
+  );
+
+  print(response.body);
   }
 
   @override
@@ -216,7 +243,9 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                submitData();
+              },
               child: const Text("Submit", style: TextStyle(fontSize: 18)),
             ),
           ),
