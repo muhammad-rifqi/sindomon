@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widget/background.dart';
-import '../widget/form_input_polda.dart';
+import '../widget/form_input_polres.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
@@ -11,14 +11,14 @@ import '../pages/personel.dart';
 import '../pages/inventaris.dart';
 import 'dart:ui';
 
-class AddPoldaPage extends StatefulWidget {
-  const AddPoldaPage({super.key});
+class AddPolresPage extends StatefulWidget {
+  const AddPolresPage({super.key});
 
   @override
-  State<AddPoldaPage> createState() => _AddPoldaPageState();
+  State<AddPolresPage> createState() => _AddPolresPageState();
 }
 
-class _AddPoldaPageState extends State<AddPoldaPage> {
+class _AddPolresPageState extends State<AddPolresPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,8 +94,8 @@ class _AddPoldaPageState extends State<AddPoldaPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
-                          menu(Icons.people_alt_rounded, "Polda", selected: true),
-                          menu(Icons.people_alt_rounded, "Polres"),
+                          menu(Icons.people_alt_rounded, "Polda"),
+                          menu(Icons.people_alt_rounded, "Polres", selected: true),
                           menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
@@ -186,7 +186,7 @@ class _AddPoldaPageState extends State<AddPoldaPage> {
 
                                   const Expanded(
                                     child: Text(
-                                      "Dashboard / Tambah Personel",
+                                      "Dashboard / Tambah Polres",
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -302,7 +302,7 @@ class _AddPoldaPageState extends State<AddPoldaPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            "Pengaturan Polda",
+                            "Pengaturan Polres",
                             style: TextStyle(
                               fontSize: 34,
                               fontWeight: FontWeight.bold,
@@ -343,7 +343,7 @@ class _AddPoldaPageState extends State<AddPoldaPage> {
                             ),
                             child: const Padding(
                               padding: EdgeInsets.all(25),
-                              child: FormTambahPolda(),
+                              child: FormTambahPolres(),
                             ),
                           ),
                         ),
