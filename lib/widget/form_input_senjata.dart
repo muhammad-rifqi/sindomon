@@ -33,8 +33,6 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
     {"id": 3, "namaKat": "Kat3"},
   ];
 
-  // String kategori = "Pistol";
-  String statusKelayakan = "Layak";
 
   Future<void> _showPicker() async {
     showModalBottomSheet(
@@ -80,8 +78,7 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
       "polda_id" : selectedPoldaId,
       "no_seri": noSeri.text,
       "kategori": selectedKatId,
-      "tahun_pengadaan": tahunPengadaan.text,
-      "status_kelayakan": statusKelayakan,
+      "tahun": tahunPengadaan.text,
       "foto": base64Image,
     };
 
@@ -195,37 +192,6 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
               hintText: "Contoh : 2024",
               border: OutlineInputBorder(),
             ),
-          ),
-
-          const SizedBox(height: 20),
-
-          /// Status Kelayakan
-          const Text(
-            "Status Kelayakan *",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 8),
-
-          DropdownButtonFormField<String>(
-            value: statusKelayakan,
-            decoration: const InputDecoration(border: OutlineInputBorder()),
-            items: const [
-              DropdownMenuItem(value: "Layak", child: Text("Layak")),
-              DropdownMenuItem(
-                value: "Perlu Perbaikan",
-                child: Text("Perlu Perbaikan"),
-              ),
-              DropdownMenuItem(
-                value: "Tidak Layak",
-                child: Text("Tidak Layak"),
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                statusKelayakan = value!;
-              });
-            },
           ),
 
           const SizedBox(height: 20),
