@@ -11,7 +11,6 @@ class FormTambahPersonel extends StatefulWidget {
 }
 
 class _FormTambahPersonelState extends State<FormTambahPersonel> {
-  String? pangkat;
   final namaLengkap = TextEditingController();
   final nrp = TextEditingController();
   final jabatan = TextEditingController();
@@ -19,8 +18,10 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
   final status = TextEditingController();
   int? selectedPoldaId;
   int? selectedPolresId;
+  int? selectedPangkatId;
   List<Map<String, dynamic>> daftarPolda = [];
   List<Map<String, dynamic>> daftarPolres = [];
+  List<Map<String, dynamic>> daftarPangkat = [];
 
   Future<void> getPolda() async {
     final prefs = await SharedPreferences.getInstance();
@@ -39,10 +40,34 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
           daftarPolda = List<Map<String, dynamic>>.from(body['data']);
         });
       } else {
-        print(response.body);
+        debugPrint(response.body);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> getPangkat() async {
+    final ppp = await SharedPreferences.getInstance();
+    final kkk = ppp.getString("token");
+
+    try {
+      final resp = await http.get(
+        Uri.parse('https://sindomon.yoknusantara.com/api/v1/pangkat'),
+        headers: {"Authorization": kkk.toString()},
+      );
+
+      if (resp.statusCode == 200) {
+        final Map<String, dynamic> body = jsonDecode(resp.body);
+
+        setState(() {
+          daftarPangkat = List<Map<String, dynamic>>.from(body['data']);
+        });
+      } else {
+        debugPrint(resp.body);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 
@@ -50,6 +75,7 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
   void initState() {
     super.initState();
     getPolda();
+    getPangkat();
   }
 
   @override
@@ -151,17 +177,19 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
 
         const SizedBox(height: 8),
 
-        DropdownButtonFormField<String>(
-          value: pangkat,
+        DropdownButtonFormField<int>(
+          value: selectedPangkatId,
           hint: const Text("Pilih Pangkat"),
-          items: const [
-            DropdownMenuItem(value: "kepala", child: Text("Kepala")),
-            DropdownMenuItem(value: "wakil", child: Text("Wakil")),
-            DropdownMenuItem(value: "bripda", child: Text("Bripda")),
-          ],
+          items:
+              daftarPangkat.map((pkt) {
+                return DropdownMenuItem<int>(
+                  value: int.parse(pkt["pangkat_id"]),
+                  child: Text(pkt["nama_pangkat"]),
+                );
+              }).toList(),
           onChanged: (v) {
             setState(() {
-              pangkat = v;
+              selectedPangkatId = v;
             });
           },
         ),
@@ -200,7 +228,7 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
           height: 50,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
+              backgroundColor: Colors.blue,
               foregroundColor: Colors.black,
             ),
             onPressed: () {},
