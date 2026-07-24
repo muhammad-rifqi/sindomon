@@ -64,6 +64,31 @@ class _PolresPageState extends State<PolresPage> {
     getPolresApi();
   }
 
+  Future<void> deletePolres(int id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      final response = await http.delete(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/polres"),
+        headers: {
+          "Authorization": token.toString(),
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"polres_id": id}),
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        getPolresApi();
+      } else {
+        debugPrint("Error : ${response.body}");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +165,11 @@ class _PolresPageState extends State<PolresPage> {
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
                           menu(Icons.people_alt_rounded, "Polda"),
-                          menu(Icons.people_alt_rounded, "Polres", selected: true),
+                          menu(
+                            Icons.people_alt_rounded,
+                            "Polres",
+                            selected: true,
+                          ),
                           menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
@@ -467,10 +496,10 @@ class _PolresPageState extends State<PolresPage> {
                                           ),
                                           columns: const [
                                             DataColumn(label: Text("ID")),
+                                            DataColumn(label: Text("Polda ID")),
                                             DataColumn(
-                                              label: Text("Polda ID"),
+                                              label: Text("Nama Polres"),
                                             ),
-                                            DataColumn(label: Text("Nama Polres")),
                                             DataColumn(
                                               label: Text("Created At"),
                                             ),
@@ -514,8 +543,54 @@ class _PolresPageState extends State<PolresPage> {
                                                                       Colors
                                                                           .red,
                                                                 ),
-                                                                onPressed:
-                                                                    () {},
+                                                                onPressed: () async {
+                                                                  final result = await showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (
+                                                                          _,
+                                                                        ) => AlertDialog(
+                                                                          title: const Text(
+                                                                            "Hapus Polres",
+                                                                          ),
+                                                                          content: const Text(
+                                                                            "Apakah Anda yakin ingin menghapus data ini?",
+                                                                          ),
+                                                                          actions: [
+                                                                            TextButton(
+                                                                              onPressed:
+                                                                                  () => Navigator.pop(
+                                                                                    context,
+                                                                                    false,
+                                                                                  ),
+                                                                              child: const Text(
+                                                                                "Batal",
+                                                                              ),
+                                                                            ),
+                                                                            ElevatedButton(
+                                                                              onPressed:
+                                                                                  () => Navigator.pop(
+                                                                                    context,
+                                                                                    true,
+                                                                                  ),
+                                                                              child: const Text(
+                                                                                "Hapus",
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                  );
+
+                                                                  if (result ==
+                                                                      true) {
+                                                                    deletePolres(
+                                                                      int.parse(
+                                                                        e["id"],
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                },
                                                               ),
                                                             ],
                                                           ),
