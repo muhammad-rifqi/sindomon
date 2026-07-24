@@ -18,7 +18,9 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
   final polres = TextEditingController();
   final status = TextEditingController();
   int? selectedPoldaId;
+  int? selectedPolresId;
   List<Map<String, dynamic>> daftarPolda = [];
+  List<Map<String, dynamic>> daftarPolres = [];
 
   Future<void> getPolda() async {
     final prefs = await SharedPreferences.getInstance();
@@ -105,11 +107,45 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
           onChanged: (value) {
             setState(() {
               selectedPoldaId = value;
+              selectedPolresId = null;
+              final selectedPolda = daftarPolda.firstWhere(
+                (item) => int.parse(item["id"]) == value,
+              );
+              daftarPolres = List<Map<String, dynamic>>.from(
+                selectedPolda["polres"] ?? [],
+              );
             });
           },
         ),
 
+        const SizedBox(height: 20),
+        const Text(
+          "Polres ID *",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
+
+        DropdownButtonFormField<int>(
+          value: selectedPolresId,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: "Pilih Polres",
+          ),
+          items:
+              daftarPolres.map((polres) {
+                return DropdownMenuItem<int>(
+                  value: int.parse(polres["id"]),
+                  child: Text(polres["nama_polres"]),
+                );
+              }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedPolresId = value;
+            });
+          },
+        ),
+
+        const SizedBox(height: 16),
 
         const Text("Pangkat *", style: TextStyle(fontWeight: FontWeight.bold)),
 
