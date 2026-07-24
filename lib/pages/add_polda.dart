@@ -335,8 +335,8 @@ class _AddPoldaPageState extends State<AddPoldaPage> {
                       /// FORM
                       /// ============================
                       Center(
-                        child: SizedBox(
-                          width: 470,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1000),
                           child: Card(
                             elevation: 8,
                             shape: RoundedRectangleBorder(

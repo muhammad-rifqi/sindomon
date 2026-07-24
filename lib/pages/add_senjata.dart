@@ -332,8 +332,8 @@ class _AddSenjataPageState extends State<AddSenjataPage> {
                       /// FORM
                       /// ============================
                       Center(
-                        child: SizedBox(
-                          width: 470,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1000),
                           child: Card(
                             elevation: 8,
                             shape: RoundedRectangleBorder(

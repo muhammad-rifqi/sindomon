@@ -58,12 +58,36 @@ class _PersonelPageState extends State<PersonelPage> {
     }
   }
 
+  Future<void> deletePersonel(int id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      final response = await http.delete(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/personel"),
+        headers: {
+          "Authorization": token.toString(),
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"personel_id": id}),
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        getPersonelApi();
+      } else {
+        debugPrint("Error : ${response.body}");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getPersonelApi();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -467,13 +491,13 @@ class _PersonelPageState extends State<PersonelPage> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                           columns: const [
-                                            DataColumn(
-                                              label: Text("NRP"),
-                                            ),
+                                            DataColumn(label: Text("NRP")),
                                             DataColumn(
                                               label: Text("Nama Lengkap"),
                                             ),
-                                            DataColumn(label: Text("Polres ID")),
+                                            DataColumn(
+                                              label: Text("Polres ID"),
+                                            ),
                                             DataColumn(
                                               label: Text("Status Aktif"),
                                             ),
@@ -485,15 +509,17 @@ class _PersonelPageState extends State<PersonelPage> {
                                                     (e) => DataRow(
                                                       cells: [
                                                         DataCell(
+                                                          Text(e["nrp"]),
+                                                        ),
+                                                        DataCell(
                                                           Text(
-                                                            e["nrp"],
+                                                            e["nama_lengkap"],
                                                           ),
                                                         ),
                                                         DataCell(
-                                                          Text(e["nama_lengkap"]),
-                                                        ),
-                                                        DataCell(
-                                                          Text("${e["polres_id"]}"),
+                                                          Text(
+                                                            "${e["polres_id"]}",
+                                                          ),
                                                         ),
                                                         DataCell(
                                                           Text(
@@ -519,8 +545,54 @@ class _PersonelPageState extends State<PersonelPage> {
                                                                       Colors
                                                                           .red,
                                                                 ),
-                                                                onPressed:
-                                                                    () {},
+                                                                onPressed: () async {
+                                                                  final result = await showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (
+                                                                          _,
+                                                                        ) => AlertDialog(
+                                                                          title: const Text(
+                                                                            "Hapus Personel",
+                                                                          ),
+                                                                          content: const Text(
+                                                                            "Apakah Anda yakin ingin menghapus data ini?",
+                                                                          ),
+                                                                          actions: [
+                                                                            TextButton(
+                                                                              onPressed:
+                                                                                  () => Navigator.pop(
+                                                                                    context,
+                                                                                    false,
+                                                                                  ),
+                                                                              child: const Text(
+                                                                                "Batal",
+                                                                              ),
+                                                                            ),
+                                                                            ElevatedButton(
+                                                                              onPressed:
+                                                                                  () => Navigator.pop(
+                                                                                    context,
+                                                                                    true,
+                                                                                  ),
+                                                                              child: const Text(
+                                                                                "Hapus",
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                  );
+
+                                                                  if (result ==
+                                                                      true) {
+                                                                    deletePersonel(
+                                                                      int.parse(
+                                                                        e["id"],
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                },
                                                               ),
                                                             ],
                                                           ),
@@ -620,50 +692,50 @@ class _PersonelPageState extends State<PersonelPage> {
           onTap: () {
             Widget page;
 
-             switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
-              break;
+            switch (title) {
+              case "Dashboard":
+                page = const DashboardPage();
+                break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+              case "Pengaturan":
+                page = const AccountSettingPage();
+                break;
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
+              case "Laporan":
+                page = const ReportPage();
+                break;
 
-            case "Senjata":
-              page = const SenjataPage();
-              break;
+              case "Senjata":
+                page = const SenjataPage();
+                break;
 
-            case "Satwa":
-              page = const SatwaPage();
-              break;
+              case "Satwa":
+                page = const SatwaPage();
+                break;
 
-            case "Personel":
-              page = const PersonelPage();
-              break;
+              case "Personel":
+                page = const PersonelPage();
+                break;
 
-            case "Inventaris":
-              page = const InventarisPage();
-              break;
+              case "Inventaris":
+                page = const InventarisPage();
+                break;
 
-            case "Pengguna":
-              page = const UserPage();
-              break;
+              case "Pengguna":
+                page = const UserPage();
+                break;
 
-            case "Polda":
+              case "Polda":
                 page = const PoldaPage();
                 break;
 
-            case "Polres":
+              case "Polres":
                 page = const PolresPage();
                 break;
 
-            default:
-              page = const DashboardPage();
-          }
+              default:
+                page = const DashboardPage();
+            }
 
             Navigator.push(context, MaterialPageRoute(builder: (_) => page));
           },
