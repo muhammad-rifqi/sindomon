@@ -17,22 +17,58 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
   final tahunPengadaan = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   Uint8List? _imageBytes;
-
   int? selectedPoldaId;
   int? selectedKatId;
+  List<Map<String, dynamic>> daftarPolda = [];
+  List<Map<String, dynamic>> daftarKategori = [];
 
-  final List<Map<String, dynamic>> daftarPolda = [
-    {"id": 1, "namaPolda": "Polda Aceh"},
-    {"id": 2, "namaPolda": "Polda Jawa Barat"},
-    {"id": 3, "namaPolda": "Polda Jawa Tengah"},
-  ];
+  Future<void> getPolda() async {
+    final pref = await SharedPreferences.getInstance();
+    final tokenn = pref.getString("token");
 
-  final List<Map<String, dynamic>> daftarKategori = [
-    {"id": 1, "namaKat": "Kat1"},
-    {"id": 2, "namaKat": "Kat2"},
-    {"id": 3, "namaKat": "Kat3"},
-  ];
+    try {
+      final responses = await http.get(
+        Uri.parse('https://sindomon.yoknusantara.com/api/v1/polda'),
+        headers: {"Authorization": tokenn.toString()},
+      );
 
+      if (responses.statusCode == 200) {
+        final Map<String, dynamic> body = jsonDecode(responses.body);
+
+        setState(() {
+          daftarPolda = List<Map<String, dynamic>>.from(body['data']);
+        });
+      } else {
+        debugPrint(responses.body);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> getKategori() async {
+    final prefst = await SharedPreferences.getInstance();
+    final tokenize = prefst.getString("token");
+
+    try {
+      final rrrr = await http.get(
+        Uri.parse('https://sindomon.yoknusantara.com/api/v1/kategori_senjata'),
+        headers: {"Authorization": tokenize.toString()},
+      );
+
+      if (rrrr.statusCode == 200) {
+        final Map<String, dynamic> body = jsonDecode(rrrr.body);
+
+        setState(() {
+          daftarKategori = List<Map<String, dynamic>>.from(body['data']);
+        });
+      } else {
+        debugPrint(rrrr.body);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   Future<void> _showPicker() async {
     showModalBottomSheet(
@@ -75,7 +111,7 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
     }
 
     final data = {
-      "polda_id" : selectedPoldaId,
+      "polda_id": selectedPoldaId,
       "no_seri": noSeri.text,
       "kategori": selectedKatId,
       "tahun": tahunPengadaan.text,
@@ -90,8 +126,25 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
       headers: {"authorization": token.toString()},
       body: jsonEncode(data),
     );
-
     debugPrint(response.body);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPolda();
+    getKategori();
+  }
+
+  Widget formField({required String label, required Widget child}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        child,
+      ],
+    );
   }
 
   @override
@@ -107,159 +160,140 @@ class _FormTambahSenjataState extends State<FormTambahSenjata> {
 
           const SizedBox(height: 25),
 
-          DropdownButtonFormField<int>(
-            value: selectedPoldaId,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: "Pilih Polda",
-            ),
-            items:
-                daftarPolda.map((polda) {
-                  return DropdownMenuItem<int>(
-                    value: polda["id"],
-                    child: Text(polda["namaPolda"]),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedPoldaId = value;
-              });
-            },
-          ),
-
-          const SizedBox(height: 25),
-
-          /// No Seri
-          const Text(
-            "No Seri *",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 8),
-
-          TextFormField(
-            controller: noSeri,
-            decoration: const InputDecoration(
-              hintText: "Masukkan No Seri",
-              border: OutlineInputBorder(),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          /// Kategori
-          const Text(
-            "Kategori Senjata *",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 8),
-
-          DropdownButtonFormField<int>(
-            value: selectedKatId,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: "Pilih Kategori Senjata",
-            ),
-            items:
-                daftarKategori.map((cat) {
-                  return DropdownMenuItem<int>(
-                    value: cat["id"],
-                    child: Text(cat["namaKat"]),
-                  );
-                }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedKatId = value;
-              });
-            },
-          ),
-
-          const SizedBox(height: 20),
-
-          /// Tahun Pengadaan
-          const Text(
-            "Tahun Pengadaan *",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 8),
-
-          TextFormField(
-            controller: tahunPengadaan,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              hintText: "Contoh : 2024",
-              border: OutlineInputBorder(),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          /// Upload Foto
-          const Text(
-            "Foto Senjata *",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 10),
-
-          Container(
-            width: double.infinity,
-            height: 180,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child:
-                _imageBytes != null
-                    ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.memory(
-                        _imageBytes!,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 180,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// KOLOM KIRI
+              Expanded(
+                child: Column(
+                  children: [
+                    formField(
+                      label: "Polda *",
+                      child: DropdownButtonFormField<int>(
+                        value: selectedPoldaId,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Pilih Polda",
+                        ),
+                        items:
+                            daftarPolda.map((polda) {
+                              return DropdownMenuItem<int>(
+                                value: int.parse(polda["id"]),
+                                child: Text(polda["nama_polda"]),
+                              );
+                            }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedPoldaId = value;
+                          });
+                        },
                       ),
-                    )
-                    : const Center(
-                      child: Icon(Icons.image, size: 80, color: Colors.grey),
                     ),
-          ),
 
-          const SizedBox(height: 12),
+                    const SizedBox(height: 20),
 
-          OutlinedButton.icon(
-            onPressed: () {
-              _showPicker();
-            },
-            icon: const Icon(Icons.photo_camera),
-            label: const Text("Pilih Foto"),
-          ),
-
-          const SizedBox(height: 30),
-
-          /// Tombol Submit
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
+                    formField(
+                      label: "No Seri *",
+                      child: TextFormField(
+                        controller: noSeri,
+                        decoration: const InputDecoration(
+                          hintText: "Masukkan No Seri",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              onPressed: () {
-                submitData();
-              },
-              child: const Text("Submit", style: TextStyle(fontSize: 18)),
-            ),
+
+              const SizedBox(width: 20),
+
+              /// KOLOM KANAN
+              Expanded(
+                child: Column(
+                  children: [
+                    formField(
+                      label: "Kategori Senjata *",
+                      child: DropdownButtonFormField<int>(
+                        value: selectedKatId,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Pilih Kategori",
+                        ),
+                        items:
+                            daftarKategori.map((cat) {
+                              return DropdownMenuItem<int>(
+                                value: int.parse(cat["id"]),
+                                child: Text(cat["tipe_laras"]),
+                              );
+                            }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedKatId = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    formField(
+                      label: "Tahun Pengadaan *",
+                      child: TextFormField(
+                        controller: tahunPengadaan,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          hintText: "2024",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
 
           const SizedBox(height: 20),
 
-          const Text(
-            "* Semua data wajib diisi",
-            style: TextStyle(color: Colors.grey),
+          formField(
+            label: "Foto Senjata *",
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 180,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child:
+                      _imageBytes != null
+                          ? ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.memory(
+                              _imageBytes!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                          : const Center(
+                            child: Icon(
+                              Icons.image,
+                              size: 80,
+                              color: Colors.grey,
+                            ),
+                          ),
+                ),
+
+                const SizedBox(height: 10),
+
+                OutlinedButton.icon(
+                  onPressed: _showPicker,
+                  icon: const Icon(Icons.photo_camera),
+                  label: const Text("Pilih Foto"),
+                ),
+              ],
+            ),
           ),
         ],
       ),
