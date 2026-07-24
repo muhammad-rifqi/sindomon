@@ -118,14 +118,14 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
     final result = jsonDecode(response.body);
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-       setState(() {
-          selectedPoldaId = null;
-          selectedPolresId = null;
-          selectedPangkatId = null;
-          selectedJabatanId = null;
-        });
-        nrp.clear();
-        namaLengkap.clear();
+      setState(() {
+        selectedPoldaId = null;
+        selectedPolresId = null;
+        selectedPangkatId = null;
+        selectedJabatanId = null;
+      });
+      nrp.clear();
+      namaLengkap.clear();
 
       ScaffoldMessenger.of(
         context,
@@ -145,167 +145,209 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
     getJabatan();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget formField({required String label, required Widget child}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "TAMBAH PERSONEL BARU",
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-        ),
-
-        const Text("NRP *", style: TextStyle(fontWeight: FontWeight.bold)),
-
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-
-        TextFormField(
-          controller: nrp,
-          decoration: InputDecoration(border: OutlineInputBorder()),
-        ),
-
-        const SizedBox(height: 25),
-
-        const Text(
-          "Nama Lengkap *",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextFormField(
-          controller: namaLengkap,
-          decoration: InputDecoration(border: OutlineInputBorder()),
-        ),
-
-        const SizedBox(height: 20),
-
-        const Text("Polda ID *", style: TextStyle(fontWeight: FontWeight.bold)),
-
-        const SizedBox(height: 8),
-
-        DropdownButtonFormField<int>(
-          value: selectedPoldaId,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: "Pilih Polda",
-          ),
-          items:
-              daftarPolda.map((polda) {
-                return DropdownMenuItem<int>(
-                  value: int.parse(polda["id"]),
-                  child: Text(polda["nama_polda"]),
-                );
-              }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedPoldaId = value;
-              selectedPolresId = null;
-              final selectedPolda = daftarPolda.firstWhere(
-                (item) => int.parse(item["id"]) == value,
-              );
-              daftarPolres = List<Map<String, dynamic>>.from(
-                selectedPolda["polres"] ?? [],
-              );
-            });
-          },
-        ),
-
-        const SizedBox(height: 20),
-        const Text(
-          "Polres ID *",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-
-        DropdownButtonFormField<int>(
-          value: selectedPolresId,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: "Pilih Polres",
-          ),
-          items:
-              daftarPolres.map((polres) {
-                return DropdownMenuItem<int>(
-                  value: int.parse(polres["id"]),
-                  child: Text(polres["nama_polres"]),
-                );
-              }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedPolresId = value;
-            });
-          },
-        ),
-
-        const SizedBox(height: 16),
-
-        const Text("Pangkat *", style: TextStyle(fontWeight: FontWeight.bold)),
-
-        const SizedBox(height: 8),
-
-        DropdownButtonFormField<int>(
-          value: selectedPangkatId,
-          hint: const Text("Pilih Pangkat"),
-          items:
-              daftarPangkat.map((pkt) {
-                return DropdownMenuItem<int>(
-                  value: int.parse(pkt["pangkat_id"]),
-                  child: Text(pkt["nama_pangkat"]),
-                );
-              }).toList(),
-          onChanged: (v) {
-            setState(() {
-              selectedPangkatId = v;
-            });
-          },
-        ),
-
-        const SizedBox(height: 20),
-
-        const Text("Jabatan *", style: TextStyle(fontWeight: FontWeight.bold)),
-
-        DropdownButtonFormField<int>(
-          value: selectedJabatanId,
-          hint: const Text("Pilih Jabatan"),
-          items:
-              daftarJabatan.map((jbt) {
-                return DropdownMenuItem<int>(
-                  value: int.parse(jbt["jabatan_id"]),
-                  child: Text(jbt["nama_jabatan"]),
-                );
-              }).toList(),
-          onChanged: (v) {
-            setState(() {
-              selectedJabatanId = v;
-            });
-          },
-        ),
-
-        const SizedBox(height: 20),
-
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.black,
-            ),
-            onPressed: () {
-              submitPersonel();
-            },
-            child: const Text("Simpan Data", style: TextStyle(fontSize: 18)),
-          ),
-        ),
-
-        const SizedBox(height: 20),
-
-        const Text(
-          "Lengkapi semua data bertanda *",
-          style: TextStyle(color: Colors.grey),
-        ),
+        child,
       ],
+    );
+  }
+
+  @override
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool twoColumn = constraints.maxWidth > 700;
+
+        final double itemWidth =
+            twoColumn ? (constraints.maxWidth - 20) / 2 : constraints.maxWidth;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "TAMBAH PERSONEL BARU",
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 25),
+
+            Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: [
+                SizedBox(
+                  width: itemWidth,
+                  child: formField(
+                    label: "NRP *",
+                    child: TextFormField(
+                      controller: nrp,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: itemWidth,
+                  child: formField(
+                    label: "Nama Lengkap *",
+                    child: TextFormField(
+                      controller: namaLengkap,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: itemWidth,
+                  child: formField(
+                    label: "Polda *",
+                    child: DropdownButtonFormField<int>(
+                      value: selectedPoldaId,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: const Text("Pilih Polda"),
+                      items:
+                          daftarPolda.map((polda) {
+                            return DropdownMenuItem<int>(
+                              value: int.parse(polda["id"]),
+                              child: Text(polda["nama_polda"]),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedPoldaId = value;
+                          selectedPolresId = null;
+
+                          final selectedPolda = daftarPolda.firstWhere(
+                            (item) => int.parse(item["id"]) == value,
+                          );
+
+                          daftarPolres = List<Map<String, dynamic>>.from(
+                            selectedPolda["polres"] ?? [],
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: itemWidth,
+                  child: formField(
+                    label: "Polres *",
+                    child: DropdownButtonFormField<int>(
+                      value: selectedPolresId,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: const Text("Pilih Polres"),
+                      items:
+                          daftarPolres.map((polres) {
+                            return DropdownMenuItem<int>(
+                              value: int.parse(polres["id"]),
+                              child: Text(polres["nama_polres"]),
+                            );
+                          }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedPolresId = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: itemWidth,
+                  child: formField(
+                    label: "Pangkat *",
+                    child: DropdownButtonFormField<int>(
+                      value: selectedPangkatId,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: const Text("Pilih Pangkat"),
+                      items:
+                          daftarPangkat.map((pkt) {
+                            return DropdownMenuItem<int>(
+                              value: int.parse(pkt["pangkat_id"]),
+                              child: Text(pkt["nama_pangkat"]),
+                            );
+                          }).toList(),
+                      onChanged: (v) {
+                        setState(() {
+                          selectedPangkatId = v;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  width: itemWidth,
+                  child: formField(
+                    label: "Jabatan *",
+                    child: DropdownButtonFormField<int>(
+                      value: selectedJabatanId,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: const Text("Pilih Jabatan"),
+                      items:
+                          daftarJabatan.map((jbt) {
+                            return DropdownMenuItem<int>(
+                              value: int.parse(jbt["jabatan_id"]),
+                              child: Text(jbt["nama_jabatan"]),
+                            );
+                          }).toList(),
+                      onChanged: (v) {
+                        setState(() {
+                          selectedJabatanId = v;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 30),
+
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: submitPersonel,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text(
+                  "Simpan Data",
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            const Text(
+              "Lengkapi semua data bertanda *",
+              style: TextStyle(color: Colors.grey),
+            ),
+          ],
+        );
+      },
     );
   }
 }

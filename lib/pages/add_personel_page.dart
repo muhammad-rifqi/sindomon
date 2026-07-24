@@ -11,7 +11,6 @@ import '../pages/personel.dart';
 import '../pages/inventaris.dart';
 import 'dart:ui';
 
-
 class AddPersonelPage extends StatefulWidget {
   const AddPersonelPage({super.key});
 
@@ -20,8 +19,6 @@ class AddPersonelPage extends StatefulWidget {
 }
 
 class _AddPersonelPageState extends State<AddPersonelPage> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -335,8 +332,8 @@ class _AddPersonelPageState extends State<AddPersonelPage> {
                       /// FORM
                       /// ============================
                       Center(
-                        child: SizedBox(
-                          width: 470,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1000),
                           child: Card(
                             elevation: 8,
                             shape: RoundedRectangleBorder(
