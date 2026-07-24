@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FormTambahPersonel extends StatefulWidget {
   const FormTambahPersonel({super.key});
@@ -9,14 +12,43 @@ class FormTambahPersonel extends StatefulWidget {
 
 class _FormTambahPersonelState extends State<FormTambahPersonel> {
   String? pangkat;
-
-  final username = TextEditingController();
-
+  final namaLengkap = TextEditingController();
+  final nrp = TextEditingController();
   final jabatan = TextEditingController();
-
   final polres = TextEditingController();
-
   final status = TextEditingController();
+  int? selectedPoldaId;
+  List<Map<String, dynamic>> daftarPolda = [];
+
+  Future<void> getPolda() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+
+    try {
+      final response = await http.get(
+        Uri.parse('https://sindomon.yoknusantara.com/api/v1/polda'),
+        headers: {"Authorization": token.toString()},
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> body = jsonDecode(response.body);
+
+        setState(() {
+          daftarPolda = List<Map<String, dynamic>>.from(body['data']);
+        });
+      } else {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPolda();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +60,56 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
 
+        const Text("NRP *", style: TextStyle(fontWeight: FontWeight.bold)),
+
+        const SizedBox(height: 8),
+
+        TextFormField(
+          controller: nrp,
+          decoration: InputDecoration(border: OutlineInputBorder()),
+        ),
+
         const SizedBox(height: 25),
 
         const Text(
-          "Nama Lengkap/Username *",
+          "Nama Lengkap *",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
 
         const SizedBox(height: 8),
 
         TextFormField(
-          controller: username,
+          controller: namaLengkap,
           decoration: InputDecoration(border: OutlineInputBorder()),
         ),
 
         const SizedBox(height: 20),
+
+        const Text("Polda ID *", style: TextStyle(fontWeight: FontWeight.bold)),
+
+        const SizedBox(height: 8),
+
+        DropdownButtonFormField<int>(
+          value: selectedPoldaId,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: "Pilih Polda",
+          ),
+          items:
+              daftarPolda.map((polda) {
+                return DropdownMenuItem<int>(
+                  value: int.parse(polda["id"]),
+                  child: Text(polda["nama_polda"]),
+                );
+              }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedPoldaId = value;
+            });
+          },
+        ),
+
+        const SizedBox(height: 8),
 
         const Text("Pangkat *", style: TextStyle(fontWeight: FontWeight.bold)),
 

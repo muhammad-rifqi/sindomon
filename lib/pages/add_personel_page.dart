@@ -11,6 +11,7 @@ import '../pages/personel.dart';
 import '../pages/inventaris.dart';
 import 'dart:ui';
 
+
 class AddPersonelPage extends StatefulWidget {
   const AddPersonelPage({super.key});
 
@@ -19,6 +20,8 @@ class AddPersonelPage extends StatefulWidget {
 }
 
 class _AddPersonelPageState extends State<AddPersonelPage> {
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
