@@ -13,15 +13,16 @@ class FormTambahPersonel extends StatefulWidget {
 class _FormTambahPersonelState extends State<FormTambahPersonel> {
   final namaLengkap = TextEditingController();
   final nrp = TextEditingController();
-  final jabatan = TextEditingController();
   final polres = TextEditingController();
   final status = TextEditingController();
   int? selectedPoldaId;
   int? selectedPolresId;
   int? selectedPangkatId;
+  int? selectedJabatanId;
   List<Map<String, dynamic>> daftarPolda = [];
   List<Map<String, dynamic>> daftarPolres = [];
   List<Map<String, dynamic>> daftarPangkat = [];
+  List<Map<String, dynamic>> daftarJabatan = [];
 
   Future<void> getPolda() async {
     final prefs = await SharedPreferences.getInstance();
@@ -71,11 +72,36 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
     }
   }
 
+   Future<void> getJabatan() async {
+    final pppp = await SharedPreferences.getInstance();
+    final kkkk = pppp.getString("token");
+
+    try {
+      final res = await http.get(
+        Uri.parse('https://sindomon.yoknusantara.com/api/v1/jabatan'),
+        headers: {"Authorization": kkkk.toString()},
+      );
+
+      if (res.statusCode == 200) {
+        final Map<String, dynamic> body = jsonDecode(res.body);
+
+        setState(() {
+          daftarJabatan = List<Map<String, dynamic>>.from(body['data']);
+        });
+      } else {
+        debugPrint(res.body);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getPolda();
     getPangkat();
+    getJabatan();
   }
 
   @override
@@ -198,27 +224,21 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
 
         const Text("Jabatan *", style: TextStyle(fontWeight: FontWeight.bold)),
 
-        TextFormField(
-          controller: jabatan,
-          decoration: InputDecoration(border: OutlineInputBorder()),
-        ),
-
-        const SizedBox(height: 20),
-
-        const Text("Polres *", style: TextStyle(fontWeight: FontWeight.bold)),
-
-        TextFormField(
-          controller: polres,
-          decoration: InputDecoration(border: OutlineInputBorder()),
-        ),
-
-        const SizedBox(height: 20),
-
-        const Text("Status", style: TextStyle(fontWeight: FontWeight.bold)),
-
-        TextFormField(
-          controller: status,
-          decoration: InputDecoration(border: OutlineInputBorder()),
+       DropdownButtonFormField<int>(
+          value: selectedJabatanId,
+          hint: const Text("Pilih Jabatan"),
+          items:
+              daftarJabatan.map((jbt) {
+                return DropdownMenuItem<int>(
+                  value: int.parse(jbt["jabatan_id"]),
+                  child: Text(jbt["nama_jabatan"]),
+                );
+              }).toList(),
+          onChanged: (v) {
+            setState(() {
+              selectedJabatanId = v;
+            });
+          },
         ),
 
         const SizedBox(height: 20),
