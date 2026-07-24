@@ -13,15 +13,33 @@ class FormTambahPolres extends StatefulWidget {
 class _FormTambahPolresState extends State<FormTambahPolres> {
   // final poldaID = TextEditingController();
   int? selectedPoldaId;
-
-  final List<Map<String, dynamic>> daftarPolda = [
-    {"id": 1, "namaPolda": "Polda Aceh"},
-    {"id": 2, "namaPolda": "Polda Jawa Barat"},
-    {"id": 3, "namaPolda": "Polda Jawa Tengah"},
-  ];
-
   bool loading = false;
   final namaPolres = TextEditingController();
+  List<Map<String, dynamic>> daftarPolda = [];
+
+  Future<void> getPolda() async {
+    final sharep = await SharedPreferences.getInstance();
+    final ptoken = sharep.getString("token");
+
+    try {
+      final respon = await http.get(
+        Uri.parse('https://sindomon.yoknusantara.com/api/v1/polda'),
+        headers: {"Authorization": ptoken.toString()},
+      );
+
+      if (respon.statusCode == 200) {
+        final Map<String, dynamic> body = jsonDecode(respon.body);
+        // print(respon.body);
+        setState(() {
+          daftarPolda = List<Map<String, dynamic>>.from(body['data']);
+        });
+      } else {
+        debugPrint(respon.body);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   Future<void> simpanPolres() async {
     if (selectedPoldaId == null || namaPolres.text.isEmpty) {
@@ -81,6 +99,12 @@ class _FormTambahPolresState extends State<FormTambahPolres> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getPolda();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,8 +132,8 @@ class _FormTambahPolresState extends State<FormTambahPolres> {
           items:
               daftarPolda.map((polda) {
                 return DropdownMenuItem<int>(
-                  value: polda["id"],
-                  child: Text(polda["namaPolda"]),
+                  value: int.parse(polda["id"]),
+                  child: Text(polda["nama_polda"]),
                 );
               }).toList(),
           onChanged: (value) {
