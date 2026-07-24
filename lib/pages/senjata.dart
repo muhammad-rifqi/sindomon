@@ -64,6 +64,31 @@ class _SenjataPageState extends State<SenjataPage> {
     getSenjataApi();
   }
 
+  Future<void> deleteSenjata(int id) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("token");
+
+      final response = await http.delete(
+        Uri.parse("https://sindomon.yoknusantara.com/api/v1/senjata"),
+        headers: {
+          "Authorization": token.toString(),
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({"senjata_id": id}),
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        getSenjataApi();
+      } else {
+        debugPrint("Error : ${response.body}");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -485,8 +510,8 @@ class _SenjataPageState extends State<SenjataPage> {
                                                     (e) => DataRow(
                                                       cells: [
                                                         DataCell(
-                                                          Image.asset(
-                                                            "assets/images/pistol.png",
+                                                          Image.network(
+                                                            e["foto"],
                                                             width: 100,
                                                             fit: BoxFit.cover,
                                                           ),
@@ -519,8 +544,54 @@ class _SenjataPageState extends State<SenjataPage> {
                                                                       Colors
                                                                           .red,
                                                                 ),
-                                                                onPressed:
-                                                                    () {},
+                                                                onPressed: () async {
+                                                                  final result = await showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (
+                                                                          _,
+                                                                        ) => AlertDialog(
+                                                                          title: const Text(
+                                                                            "Hapus Senjata",
+                                                                          ),
+                                                                          content: const Text(
+                                                                            "Apakah Anda yakin ingin menghapus data ini?",
+                                                                          ),
+                                                                          actions: [
+                                                                            TextButton(
+                                                                              onPressed:
+                                                                                  () => Navigator.pop(
+                                                                                    context,
+                                                                                    false,
+                                                                                  ),
+                                                                              child: const Text(
+                                                                                "Batal",
+                                                                              ),
+                                                                            ),
+                                                                            ElevatedButton(
+                                                                              onPressed:
+                                                                                  () => Navigator.pop(
+                                                                                    context,
+                                                                                    true,
+                                                                                  ),
+                                                                              child: const Text(
+                                                                                "Hapus",
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                  );
+
+                                                                  if (result ==
+                                                                      true) {
+                                                                    deleteSenjata(
+                                                                      int.parse(
+                                                                        e["id"],
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                },
                                                               ),
                                                             ],
                                                           ),
@@ -620,50 +691,50 @@ class _SenjataPageState extends State<SenjataPage> {
           onTap: () {
             Widget page;
 
-           switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
-              break;
+            switch (title) {
+              case "Dashboard":
+                page = const DashboardPage();
+                break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+              case "Pengaturan":
+                page = const AccountSettingPage();
+                break;
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
+              case "Laporan":
+                page = const ReportPage();
+                break;
 
-            case "Senjata":
-              page = const SenjataPage();
-              break;
+              case "Senjata":
+                page = const SenjataPage();
+                break;
 
-            case "Satwa":
-              page = const SatwaPage();
-              break;
+              case "Satwa":
+                page = const SatwaPage();
+                break;
 
-            case "Personel":
-              page = const PersonelPage();
-              break;
+              case "Personel":
+                page = const PersonelPage();
+                break;
 
-            case "Inventaris":
-              page = const InventarisPage();
-              break;
+              case "Inventaris":
+                page = const InventarisPage();
+                break;
 
-            case "Pengguna":
-              page = const UserPage();
-              break;
+              case "Pengguna":
+                page = const UserPage();
+                break;
 
-            case "Polda":
+              case "Polda":
                 page = const PoldaPage();
                 break;
 
-            case "Polres":
+              case "Polres":
                 page = const PolresPage();
                 break;
 
-            default:
-              page = const DashboardPage();
-          }
+              default:
+                page = const DashboardPage();
+            }
 
             Navigator.push(context, MaterialPageRoute(builder: (_) => page));
           },
