@@ -72,7 +72,7 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
     }
   }
 
-   Future<void> getJabatan() async {
+  Future<void> getJabatan() async {
     final pppp = await SharedPreferences.getInstance();
     final kkkk = pppp.getString("token");
 
@@ -93,6 +93,47 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
       }
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  Future<void> submitPersonel() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+
+    final response = await http.post(
+      Uri.parse("https://sindomon.yoknusantara.com/api/v1/personel"),
+      headers: {"Authorization": token.toString()},
+      body: jsonEncode({
+        "nrp": nrp.text,
+        "nama_lengkap": namaLengkap.text,
+        "polda_id": selectedPoldaId,
+        "polres_id": selectedPolresId,
+        "pangkat_id": selectedPangkatId,
+        "jabatan_id": selectedJabatanId,
+      }),
+    );
+
+    if (!mounted) return;
+
+    final result = jsonDecode(response.body);
+
+    if (response.statusCode == 201 || response.statusCode == 200) {
+       setState(() {
+          selectedPoldaId = null;
+          selectedPolresId = null;
+          selectedPangkatId = null;
+          selectedJabatanId = null;
+        });
+        nrp.clear();
+        namaLengkap.clear();
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result["message"])));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result["message"])));
     }
   }
 
@@ -224,7 +265,7 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
 
         const Text("Jabatan *", style: TextStyle(fontWeight: FontWeight.bold)),
 
-       DropdownButtonFormField<int>(
+        DropdownButtonFormField<int>(
           value: selectedJabatanId,
           hint: const Text("Pilih Jabatan"),
           items:
@@ -251,7 +292,9 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
               backgroundColor: Colors.blue,
               foregroundColor: Colors.black,
             ),
-            onPressed: () {},
+            onPressed: () {
+              submitPersonel();
+            },
             child: const Text("Simpan Data", style: TextStyle(fontSize: 18)),
           ),
         ),
