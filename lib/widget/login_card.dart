@@ -39,20 +39,29 @@ class _LoginCardState extends State<LoginCard> {
           "password": passwordController.text,
         }),
       );
-    
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         String token = data["jwt_token"];
+        String usernameLogin = data["data"][0]["username"];
+        String poldaLogin = data["data"][0]["polda_id"];
+        String roleID = data["data"][0]["roles_id"];
+        String uuid = data["data"][0]["uuid"];
+        String expired = data["data"][0]["expired"];
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString("token", token);
-     
+        await prefs.setString("username_login", usernameLogin);
+        await prefs.setString("polda_login", poldaLogin);
+        await prefs.setString("roleid_login", roleID);
+        await prefs.setString("uuid_login", uuid);
+        await prefs.setString("expired_login", expired);
         if (!mounted) return;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const DashboardPage()),
         );
       } else {
-         if (!mounted) return;
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Login gagal: ${response.body}")),
         );

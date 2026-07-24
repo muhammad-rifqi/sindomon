@@ -25,6 +25,15 @@ class PoldaPage extends StatefulWidget {
 class _PoldaPageState extends State<PoldaPage> {
   List<Map<String, dynamic>> polda = [];
   bool isLoading = true;
+  String unLogin = "";
+
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
 
   Future<void> getPoldaApi() async {
     try {
@@ -61,6 +70,7 @@ class _PoldaPageState extends State<PoldaPage> {
   @override
   void initState() {
     super.initState();
+    loadUser();
     getPoldaApi();
   }
 
@@ -374,13 +384,13 @@ class _PoldaPageState extends State<PoldaPage> {
                                   const SizedBox(width: 10),
 
                                   // Jangan pakai Expanded di sini
-                                  const Column(
+                                  Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Administrator",
+                                        unLogin,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,

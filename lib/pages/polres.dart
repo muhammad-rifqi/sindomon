@@ -25,6 +25,15 @@ class PolresPage extends StatefulWidget {
 class _PolresPageState extends State<PolresPage> {
   List<Map<String, dynamic>> polres = [];
   bool isLoading = true;
+  String unLogin = "";
+
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
 
   Future<void> getPolresApi() async {
     try {
@@ -61,6 +70,7 @@ class _PolresPageState extends State<PolresPage> {
   @override
   void initState() {
     super.initState();
+    loadUser();
     getPolresApi();
   }
 
@@ -374,13 +384,13 @@ class _PolresPageState extends State<PolresPage> {
                                   const SizedBox(width: 10),
 
                                   // Jangan pakai Expanded di sini
-                                  const Column(
+                                  Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Administrator",
+                                        unLogin,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,

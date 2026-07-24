@@ -25,6 +25,15 @@ class PersonelPage extends StatefulWidget {
 class _PersonelPageState extends State<PersonelPage> {
   List<Map<String, dynamic>> datapersonel = [];
   bool isLoading = true;
+  String unLogin = "";
+
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
 
   Future<void> getPersonelApi() async {
     try {
@@ -86,6 +95,7 @@ class _PersonelPageState extends State<PersonelPage> {
   @override
   void initState() {
     super.initState();
+    loadUser();
     getPersonelApi();
   }
 
@@ -370,13 +380,13 @@ class _PersonelPageState extends State<PersonelPage> {
                                   const SizedBox(width: 10),
 
                                   // Jangan pakai Expanded di sini
-                                  const Column(
+                                  Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Administrator",
+                                        unLogin,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,

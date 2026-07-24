@@ -9,6 +9,7 @@ import '../pages/senjata.dart';
 import '../pages/personel.dart';
 import '../pages/inventaris.dart';
 import 'dart:ui';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountSettingPage extends StatefulWidget {
   const AccountSettingPage({super.key});
@@ -18,6 +19,22 @@ class AccountSettingPage extends StatefulWidget {
 }
 
 class _AccountSettingPageState extends State<AccountSettingPage> {
+
+  String unLogin = "";
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
+
+   @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -262,13 +279,13 @@ class _AccountSettingPageState extends State<AccountSettingPage> {
 
                                   const SizedBox(width: 10),
 
-                                  const Column(
+                                  Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Administrator",
+                                        unLogin,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
