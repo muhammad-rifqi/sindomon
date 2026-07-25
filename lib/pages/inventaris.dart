@@ -8,7 +8,9 @@ import '../pages/satwa.dart';
 import '../pages/senjata.dart';
 import '../pages/personel.dart';
 import '../pages/add_inventaris_page.dart';
+import '../pages/login_page.dart';
 import 'dart:ui';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InventarisPage extends StatefulWidget {
   const InventarisPage({super.key});
@@ -50,6 +52,40 @@ class _InventarisPageState extends State<InventarisPage> {
       "kondisi": "Baik",
     },
   ];
+
+  String unLogin = "";
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("token");
+    await prefs.remove("username_login");
+    await prefs.remove("polda_login");
+    await prefs.remove("roleid_login");
+    await prefs.remove("uuid_login");
+    await prefs.remove("expired_login");
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +167,6 @@ class _InventarisPageState extends State<InventarisPage> {
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
                           menu(Icons.gavel_rounded, "Senjata"),
-                          menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel"),
@@ -149,6 +184,7 @@ class _InventarisPageState extends State<InventarisPage> {
                     ),
 
                     menu(Icons.settings_rounded, "Pengaturan"),
+                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -603,45 +639,49 @@ class _InventarisPageState extends State<InventarisPage> {
             borderRadius: BorderRadius.circular(14),
           ),
           hoverColor: Colors.white10,
-          onTap: () {
+          onTap: () async {
+            if (title == "Logout") {
+              await logout();
+              return;
+            }
             Widget page;
 
             switch (title) {
-            case "Dashboard":
-              page = const DashboardPage();
-              break;
+              case "Dashboard":
+                page = const DashboardPage();
+                break;
 
-            case "Pengaturan":
-              page = const AccountSettingPage();
-              break;
+              case "Pengaturan":
+                page = const AccountSettingPage();
+                break;
 
-            case "Laporan":
-              page = const ReportPage();
-              break;
+              case "Laporan":
+                page = const ReportPage();
+                break;
 
-            case "Senjata":
-              page = const SenjataPage();
-              break;
+              case "Senjata":
+                page = const SenjataPage();
+                break;
 
-            case "Satwa":
-              page = const SatwaPage();
-              break;
+              case "Satwa":
+                page = const SatwaPage();
+                break;
 
-            case "Personel":
-              page = const PersonelPage();
-              break;
+              case "Personel":
+                page = const PersonelPage();
+                break;
 
-            case "Inventaris":
-              page = const InventarisPage();
-              break;
+              case "Inventaris":
+                page = const InventarisPage();
+                break;
 
-            case "Pengguna":
-              page = const UserPage();
-              break;
+              case "Pengguna":
+                page = const UserPage();
+                break;
 
-            default:
-              page = const DashboardPage();
-          }
+              default:
+                page = const DashboardPage();
+            }
 
             Navigator.push(context, MaterialPageRoute(builder: (_) => page));
           },
