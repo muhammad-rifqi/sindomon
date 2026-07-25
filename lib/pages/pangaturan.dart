@@ -8,6 +8,7 @@ import '../pages/user_page.dart';
 import '../pages/senjata.dart';
 import '../pages/personel.dart';
 import '../pages/inventaris.dart';
+import '../pages/login_page.dart';
 import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,7 +20,6 @@ class AccountSettingPage extends StatefulWidget {
 }
 
 class _AccountSettingPageState extends State<AccountSettingPage> {
-
   String unLogin = "";
   Future<void> loadUser() async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,10 +29,29 @@ class _AccountSettingPageState extends State<AccountSettingPage> {
     });
   }
 
-   @override
+  @override
   void initState() {
     super.initState();
     loadUser();
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("token");
+    await prefs.remove("username_login");
+    await prefs.remove("polda_login");
+    await prefs.remove("roleid_login");
+    await prefs.remove("uuid_login");
+    await prefs.remove("expired_login");
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+      (route) => false,
+    );
   }
 
   @override
@@ -129,6 +148,7 @@ class _AccountSettingPageState extends State<AccountSettingPage> {
                     ),
 
                     menu(Icons.settings_rounded, "Pengaturan", selected: true),
+                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -440,7 +460,12 @@ class _AccountSettingPageState extends State<AccountSettingPage> {
             borderRadius: BorderRadius.circular(14),
           ),
           hoverColor: Colors.white10,
-          onTap: () {
+          onTap: () async {
+            if (title == "Logout") {
+              await logout();
+              return;
+            }
+
             Widget page;
 
             switch (title) {

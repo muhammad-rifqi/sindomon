@@ -10,6 +10,7 @@ import '../pages/inventaris.dart';
 import '../pages/add_polres.dart';
 import '../pages/personel.dart';
 import '../pages/polda.dart';
+import '../pages/login_page.dart';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -97,6 +98,25 @@ class _PolresPageState extends State<PolresPage> {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("token");
+    await prefs.remove("username_login");
+    await prefs.remove("polda_login");
+    await prefs.remove("roleid_login");
+    await prefs.remove("uuid_login");
+    await prefs.remove("expired_login");
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+      (route) => false,
+    );
   }
 
   @override
@@ -188,6 +208,7 @@ class _PolresPageState extends State<PolresPage> {
                           menu(Icons.inventory_rounded, "Stok Amunisi"),
                           menu(Icons.memory_rounded, "Perangkat"),
                           menu(Icons.people_alt_rounded, "Pengguna"),
+                          menu(Icons.logout_rounded, "Logout"),
                         ],
                       ),
                     ),
@@ -199,6 +220,7 @@ class _PolresPageState extends State<PolresPage> {
                     ),
 
                     menu(Icons.settings_rounded, "Pengaturan"),
+                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -697,7 +719,11 @@ class _PolresPageState extends State<PolresPage> {
             borderRadius: BorderRadius.circular(14),
           ),
           hoverColor: Colors.white10,
-          onTap: () {
+          onTap: () async {
+            if (title == "Logout") {
+              await logout();
+              return;
+            }
             Widget page;
 
             switch (title) {

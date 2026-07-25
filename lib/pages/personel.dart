@@ -10,6 +10,7 @@ import '../pages/inventaris.dart';
 import '../pages/add_personel_page.dart';
 import '../pages/polda.dart';
 import '../pages/polres.dart';
+import '../pages/login_page.dart';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -97,6 +98,25 @@ class _PersonelPageState extends State<PersonelPage> {
     super.initState();
     loadUser();
     getPersonelApi();
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("token");
+    await prefs.remove("username_login");
+    await prefs.remove("polda_login");
+    await prefs.remove("roleid_login");
+    await prefs.remove("uuid_login");
+    await prefs.remove("expired_login");
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+      (route) => false,
+    );
   }
 
   @override
@@ -195,6 +215,7 @@ class _PersonelPageState extends State<PersonelPage> {
                     ),
 
                     menu(Icons.settings_rounded, "Pengaturan"),
+                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -699,7 +720,12 @@ class _PersonelPageState extends State<PersonelPage> {
             borderRadius: BorderRadius.circular(14),
           ),
           hoverColor: Colors.white10,
-          onTap: () {
+          onTap: () async {
+            if (title == "Logout") {
+              await logout();
+              return;
+            }
+
             Widget page;
 
             switch (title) {

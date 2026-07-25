@@ -10,6 +10,7 @@ import '../pages/polda.dart';
 import '../pages/polres.dart';
 import '../pages/add_senjata.dart';
 import '../pages/personel.dart';
+import '../pages/login_page.dart';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -99,6 +100,25 @@ class _SenjataPageState extends State<SenjataPage> {
     }
   }
 
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("token");
+    await prefs.remove("username_login");
+    await prefs.remove("polda_login");
+    await prefs.remove("roleid_login");
+    await prefs.remove("uuid_login");
+    await prefs.remove("expired_login");
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +197,11 @@ class _SenjataPageState extends State<SenjataPage> {
                           menu(Icons.pets_rounded, "Satwa"),
                           menu(Icons.people_alt_rounded, "Polda"),
                           menu(Icons.people_alt_rounded, "Polres"),
-                          menu(Icons.gavel_rounded,"Senjata Api",selected: true,),
+                          menu(
+                            Icons.gavel_rounded,
+                            "Senjata Api",
+                            selected: true,
+                          ),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
@@ -196,6 +220,7 @@ class _SenjataPageState extends State<SenjataPage> {
                     ),
 
                     menu(Icons.settings_rounded, "Pengaturan"),
+                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -694,7 +719,12 @@ class _SenjataPageState extends State<SenjataPage> {
             borderRadius: BorderRadius.circular(14),
           ),
           hoverColor: Colors.white10,
-          onTap: () {
+          onTap: () async {
+            if (title == "Logout") {
+              await logout();
+              return;
+            }
+
             Widget page;
 
             switch (title) {
