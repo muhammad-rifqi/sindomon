@@ -207,7 +207,6 @@ class _PolresPageState extends State<PolresPage> {
                           menu(Icons.inventory_rounded, "Stok Amunisi"),
                           menu(Icons.memory_rounded, "Perangkat"),
                           menu(Icons.people_alt_rounded, "Pengguna"),
-                          menu(Icons.logout_rounded, "Logout"),
                         ],
                       ),
                     ),
