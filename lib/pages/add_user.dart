@@ -141,7 +141,7 @@ class _AddUserPageState extends State<AddUserPage> {
                           menu(Icons.badge_rounded, "Personel"),
                           menu(Icons.inventory_rounded, "Stok Amunisi"),
                           menu(Icons.memory_rounded, "Perangkat"),
-                          menu(
+                          menu( 
                             Icons.people_alt_rounded,
                             "Pengguna",
                             selected: true,
