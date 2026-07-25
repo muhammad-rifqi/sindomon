@@ -25,6 +25,15 @@ class SenjataPage extends StatefulWidget {
 class _SenjataPageState extends State<SenjataPage> {
   List<Map<String, dynamic>> senjataapi = [];
   bool isLoading = true;
+  String unLogin = "";
+
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
 
   Future<void> getSenjataApi() async {
     try {
@@ -61,6 +70,7 @@ class _SenjataPageState extends State<SenjataPage> {
   @override
   void initState() {
     super.initState();
+    loadUser();
     getSenjataApi();
   }
 
@@ -167,11 +177,7 @@ class _SenjataPageState extends State<SenjataPage> {
                           menu(Icons.pets_rounded, "Satwa"),
                           menu(Icons.people_alt_rounded, "Polda"),
                           menu(Icons.people_alt_rounded, "Polres"),
-                          menu(
-                            Icons.gavel_rounded,
-                            "Senjata Api",
-                            selected: true,
-                          ),
+                          menu(Icons.gavel_rounded,"Senjata Api",selected: true,),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
@@ -375,13 +381,13 @@ class _SenjataPageState extends State<SenjataPage> {
                                   const SizedBox(width: 10),
 
                                   // Jangan pakai Expanded di sini
-                                  const Column(
+                                  Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Administrator",
+                                        unLogin,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,

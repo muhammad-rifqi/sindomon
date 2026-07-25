@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:sindomon/pages/add_user.dart';
 import '../widget/background.dart';
-import '../pages/add_user.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
+import '../pages/satwa.dart';
+import '../pages/inventaris.dart';
+import '../pages/polda.dart';
+import '../pages/polres.dart';
+import '../pages/personel.dart';
+import '../pages/senjata.dart';
 import 'dart:ui';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -18,6 +25,15 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   List<Map<String, dynamic>> users = [];
   bool isLoading = true;
+  String unLogin = "";
+
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
 
   Future<void> getUsers() async {
     try {
@@ -49,6 +65,7 @@ class _UserPageState extends State<UserPage> {
   @override
   void initState() {
     super.initState();
+    loadUser();
     getUsers();
   }
 
@@ -127,18 +144,16 @@ class _UserPageState extends State<UserPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
-                          menu(Icons.gavel_rounded, "Senjata Api"),
+                          menu(Icons.people_alt_rounded, "Polda"),
+                          menu(Icons.people_alt_rounded, "Polres"),
+                          menu(Icons.gavel_rounded,"Senjata Api",),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel"),
                           menu(Icons.inventory_rounded, "Stok Amunisi"),
                           menu(Icons.memory_rounded, "Perangkat"),
-                          menu(
-                            Icons.people_alt_rounded,
-                            "Pengguna",
-                            selected: true,
-                          ),
+                          menu(Icons.people_alt_rounded, "Pengguna",selected: true),
                         ],
                       ),
                     ),
@@ -335,13 +350,13 @@ class _UserPageState extends State<UserPage> {
                                   const SizedBox(width: 10),
 
                                   // Jangan pakai Expanded di sini
-                                  const Column(
+                                  Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Administrator",
+                                        unLogin,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
@@ -612,6 +627,34 @@ class _UserPageState extends State<UserPage> {
 
               case "Laporan":
                 page = const ReportPage();
+                break;
+
+              case "Senjata":
+                page = const SenjataPage();
+                break;
+
+              case "Satwa":
+                page = const SatwaPage();
+                break;
+
+              case "Personel":
+                page = const PersonelPage();
+                break;
+
+              case "Inventaris":
+                page = const InventarisPage();
+                break;
+
+              case "Pengguna":
+                page = const UserPage();
+                break;
+
+              case "Polda":
+                page = const PoldaPage();
+                break;
+
+              case "Polres":
+                page = const PolresPage();
                 break;
 
               default:

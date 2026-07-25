@@ -4,12 +4,15 @@ import '../widget/form_input_user.dart';
 import '../pages/pangaturan.dart';
 import '../pages/dashboard.dart';
 import '../pages/report.dart';
-import '../pages/user_page.dart';
 import '../pages/satwa.dart';
-import '../pages/senjata.dart';
-import '../pages/personel.dart';
 import '../pages/inventaris.dart';
+import '../pages/polda.dart';
+import '../pages/polres.dart';
+import '../pages/personel.dart';
+import '../pages/senjata.dart';
+import '../pages/user_page.dart';
 import 'dart:ui';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddUserPage extends StatefulWidget {
   const AddUserPage({super.key});
@@ -19,6 +22,22 @@ class AddUserPage extends StatefulWidget {
 }
 
 class _AddUserPageState extends State<AddUserPage> {
+  String unLogin = "";
+
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,14 +113,20 @@ class _AddUserPageState extends State<AddUserPage> {
                           menu(Icons.inventory_2_rounded, "Inventaris"),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
-                          menu(Icons.gavel_rounded, "Senjata"),
+                          menu(Icons.people_alt_rounded, "Polda"),
+                          menu(Icons.people_alt_rounded, "Polres"),
+                          menu(Icons.gavel_rounded, "Senjata Api"),
                           menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel"),
                           menu(Icons.inventory_rounded, "Stok Amunisi"),
                           menu(Icons.memory_rounded, "Perangkat"),
-                          menu(Icons.people_alt_rounded, "Pengguna", selected: true),
+                          menu(
+                            Icons.people_alt_rounded,
+                            "Pengguna",
+                            selected: true,
+                          ),
                         ],
                       ),
                     ),
@@ -263,13 +288,13 @@ class _AddUserPageState extends State<AddUserPage> {
 
                                   const SizedBox(width: 10),
 
-                                  const Column(
+                                  Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Administrator",
+                                        unLogin,
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14,
@@ -332,8 +357,8 @@ class _AddUserPageState extends State<AddUserPage> {
                       /// FORM
                       /// ============================
                       Center(
-                        child: SizedBox(
-                          width: 470,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 1000),
                           child: Card(
                             elevation: 8,
                             shape: RoundedRectangleBorder(
@@ -458,6 +483,14 @@ class _AddUserPageState extends State<AddUserPage> {
 
               case "Pengguna":
                 page = const UserPage();
+                break;
+
+              case "Polda":
+                page = const PoldaPage();
+                break;
+
+              case "Polres":
+                page = const PolresPage();
                 break;
 
               default:
