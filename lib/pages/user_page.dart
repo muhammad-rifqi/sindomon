@@ -167,7 +167,6 @@ class _UserPageState extends State<UserPage> {
                           menu(Icons.people_alt_rounded, "Polda"),
                           menu(Icons.people_alt_rounded, "Polres"),
                           menu(Icons.gavel_rounded, "Senjata Api"),
-                          menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel"),

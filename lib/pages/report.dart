@@ -52,7 +52,6 @@ class _ReportPageState extends State<ReportPage> {
                           menu(Icons.people_alt, "Organisasi"),
                           menu(Icons.list, "Satwa"),
                           menu(Icons.list, "Senjata Api"),
-                          menu(Icons.list, "Kategori Senjata"),
                           menu(Icons.inbox, "Kotak Masuk"),
                           menu(Icons.outbox, "Kotak Keluar"),
                           menu(Icons.people, "Personel"),

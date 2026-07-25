@@ -201,7 +201,6 @@ class _PolresPageState extends State<PolresPage> {
                             selected: true,
                           ),
                           menu(Icons.gavel_rounded, "Senjata"),
-                          menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel"),

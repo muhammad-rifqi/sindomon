@@ -197,7 +197,6 @@ class _PersonelPageState extends State<PersonelPage> {
                           menu(Icons.people_alt_rounded, "Polda"),
                           menu(Icons.people_alt_rounded, "Polres"),
                           menu(Icons.gavel_rounded, "Senjata"),
-                          menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel", selected: true),

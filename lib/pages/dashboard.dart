@@ -140,7 +140,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     const SizedBox(height: 5),
 
                     Text(
-                      "Management Inventaris",
+                      "Management Dashboard",
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.6),
                         fontSize: 13,
@@ -166,7 +166,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           menu(Icons.people_alt_rounded, "Polda"),
                           menu(Icons.people_alt_rounded, "Polres"),
                           menu(Icons.gavel_rounded, "Senjata"),
-                          menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel"),
