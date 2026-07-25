@@ -55,6 +55,7 @@ class _AddInventarisPageState extends State<AddInventarisPage> {
       (route) => false,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,9 +128,13 @@ class _AddInventarisPageState extends State<AddInventarisPage> {
                           menu(Icons.dashboard_rounded, "Dashboard"),
                           menu(Icons.description_rounded, "Laporan"),
                           menu(Icons.map_rounded, "Wilayah"),
-                          menu(Icons.inventory_2_rounded, "Inventaris"),
+                          menu(
+                            Icons.inventory_2_rounded,
+                            "Inventaris",
+                            selected: true,
+                          ),
                           menu(Icons.groups_rounded, "Organisasi"),
-                          menu(Icons.pets_rounded, "Satwa", selected: true),
+                          menu(Icons.pets_rounded, "Satwa"),
                           menu(Icons.gavel_rounded, "Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
@@ -368,8 +373,8 @@ class _AddInventarisPageState extends State<AddInventarisPage> {
                       /// FORM
                       /// ============================
                       Center(
-                        child: SizedBox(
-                          width: 470,
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 1000),
                           child: Card(
                             elevation: 8,
                             shape: RoundedRectangleBorder(
