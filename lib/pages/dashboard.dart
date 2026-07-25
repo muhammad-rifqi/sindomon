@@ -11,6 +11,7 @@ import '../pages/polda.dart';
 import '../pages/polres.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../pages/login_page.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,25 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     getPoldaApi();
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("token");
+    await prefs.remove("username_login");
+    await prefs.remove("polda_login");
+    await prefs.remove("roleid_login");
+    await prefs.remove("uuid_login");
+    await prefs.remove("expired_login");
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+      (route) => false,
+    );
   }
 
   @override
@@ -164,6 +184,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
 
                     menu(Icons.settings_rounded, "Pengaturan"),
+                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -480,7 +501,12 @@ class _DashboardPageState extends State<DashboardPage> {
             borderRadius: BorderRadius.circular(14),
           ),
           hoverColor: Colors.white10,
-          onTap: () {
+          onTap: () async {
+            if (title == "Logout") {
+              await logout();
+              return;
+            }
+
             Widget page;
 
             switch (title) {
