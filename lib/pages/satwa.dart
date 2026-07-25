@@ -8,7 +8,9 @@ import '../pages/senjata.dart';
 import '../pages/personel.dart';
 import '../pages/inventaris.dart';
 import '../pages/add_satwa.dart';
+import '../pages/login_page.dart';
 import 'dart:ui';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SatwaPage extends StatefulWidget {
   const SatwaPage({super.key});
@@ -65,6 +67,40 @@ class _SatwaPageState extends State<SatwaPage> {
       "status_vaksin": "Sudah",
     },
   ];
+
+  String unLogin = "";
+  Future<void> loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      unLogin = prefs.getString("username_login") ?? "";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUser();
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("token");
+    await prefs.remove("username_login");
+    await prefs.remove("polda_login");
+    await prefs.remove("roleid_login");
+    await prefs.remove("uuid_login");
+    await prefs.remove("expired_login");
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +178,6 @@ class _SatwaPageState extends State<SatwaPage> {
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa", selected: true),
                           menu(Icons.gavel_rounded, "Senjata"),
-                          menu(Icons.category_rounded, "Kategori Senjata"),
                           menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
                           menu(Icons.outbox_rounded, "Kotak Keluar"),
                           menu(Icons.badge_rounded, "Personel"),
@@ -160,6 +195,7 @@ class _SatwaPageState extends State<SatwaPage> {
                     ),
 
                     menu(Icons.settings_rounded, "Pengaturan"),
+                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -647,7 +683,11 @@ class _SatwaPageState extends State<SatwaPage> {
             borderRadius: BorderRadius.circular(14),
           ),
           hoverColor: Colors.white10,
-          onTap: () {
+          onTap: () async {
+            if (title == "Logout") {
+              await logout();
+              return;
+            }
             Widget page;
 
             switch (title) {
