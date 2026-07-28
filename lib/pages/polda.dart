@@ -191,7 +191,17 @@ class _PoldaPageState extends State<PoldaPage> {
                           menu(Icons.dashboard_rounded, "Dashboard"),
                           menu(Icons.description_rounded, "Laporan"),
                           menu(Icons.map_rounded, "Wilayah"),
-                          menu(Icons.inventory_2_rounded, "Inventaris"),
+                          treeMenu(
+                            icon: Icons.inventory,
+                            title: "Inventaris",
+                            children: [
+                              menu(Icons.gavel, "Senjata"),
+
+                              menu(Icons.memory, "Perangkat"),
+
+                              menu(Icons.inventory, "Stok Amunisi"),
+                            ],
+                          ),
                           menu(Icons.groups_rounded, "Organisasi"),
                           menu(Icons.pets_rounded, "Satwa"),
                           menu(
@@ -691,6 +701,51 @@ class _PoldaPageState extends State<PoldaPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget treeMenu({
+    required IconData icon,
+    required String title,
+    required List<Widget> children,
+    bool selected = false,
+    bool initiallyExpanded = false,
+  }) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+      ),
+      child: ExpansionTile(
+        initiallyExpanded: initiallyExpanded,
+        dense: true,
+        visualDensity: VisualDensity.compact,
+
+        leading: Icon(icon, color: selected ? Colors.blue : Colors.white70),
+
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: selected ? Colors.blue : Colors.white,
+          ),
+        ),
+
+        iconColor: Colors.white70,
+        collapsedIconColor: Colors.white70,
+        textColor: Colors.white,
+        collapsedTextColor: Colors.white,
+
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+        childrenPadding: const EdgeInsets.only(left: 20),
+
+        shape: const RoundedRectangleBorder(side: BorderSide.none),
+
+        collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+
+        children: children,
       ),
     );
   }
