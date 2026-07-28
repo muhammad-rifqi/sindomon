@@ -17,6 +17,8 @@ class _LoginCardState extends State<LoginCard> {
   final passwordController = TextEditingController();
 
   bool isLoading = false;
+  bool usernameError = false;
+  bool passwordError = false;
 
   @override
   void dispose() {
@@ -26,6 +28,15 @@ class _LoginCardState extends State<LoginCard> {
   }
 
   Future<void> login() async {
+    setState(() {
+      usernameError = usernameController.text.trim().isEmpty;
+      passwordError = passwordController.text.trim().isEmpty;
+    });
+
+    if (usernameError || passwordError) {
+      return;
+    }
+
     setState(() {
       isLoading = true;
     });
@@ -113,7 +124,11 @@ class _LoginCardState extends State<LoginCard> {
 
           const SizedBox(height: 6),
 
-          AppTextField(hint: "input_username", controller: usernameController),
+          AppTextField(
+            hint: "input_username",
+            controller: usernameController,
+            error: usernameError,
+          ),
 
           const SizedBox(height: 15),
 
@@ -131,6 +146,7 @@ class _LoginCardState extends State<LoginCard> {
             hint: "input_password",
             controller: passwordController,
             obscure: true,
+            error: passwordError,
           ),
 
           const SizedBox(height: 25),
