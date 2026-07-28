@@ -61,7 +61,7 @@ class AppTextField extends StatelessWidget {
             ),
           ),
 
-          errorText: error ? "" : null, // agar border merah muncul tanpa pesan
+          errorText: error ? "required" : null, // agar border merah muncul tanpa pesan
         ),
       ),
     );
