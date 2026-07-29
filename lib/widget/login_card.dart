@@ -67,6 +67,7 @@ class _LoginCardState extends State<LoginCard> {
         await prefs.setString("uuid_login", uuid);
         await prefs.setString("expired_login", expired);
         if (!mounted) return;
+        
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const DashboardPage()),
