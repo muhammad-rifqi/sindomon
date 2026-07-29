@@ -13,6 +13,8 @@ import '../pages/inventaris.dart';
 import '../pages/login_page.dart';
 import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widget/app_menu.dart';
+import '../pages/polres.dart';
 
 class AddPolresPage extends StatefulWidget {
   const AddPolresPage({super.key});
@@ -123,29 +125,66 @@ class _AddPolresPageState extends State<AddPolresPage> {
                     const SizedBox(height: 30),
 
                     Expanded(
-                      child: ListView(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        children: [
-                          menu(Icons.dashboard_rounded, "Dashboard"),
-                          menu(Icons.description_rounded, "Laporan"),
-                          menu(Icons.map_rounded, "Wilayah"),
-                          menu(Icons.inventory_2_rounded, "Inventaris"),
-                          menu(Icons.groups_rounded, "Organisasi"),
-                          menu(Icons.pets_rounded, "Satwa"),
-                          menu(Icons.people_alt_rounded, "Polda"),
-                          menu(
-                            Icons.people_alt_rounded,
-                            "Polres",
-                            selected: true,
-                          ),
-                          menu(Icons.gavel_rounded, "Senjata"),
-                          menu(Icons.move_to_inbox_rounded, "Kotak Masuk"),
-                          menu(Icons.outbox_rounded, "Kotak Keluar"),
-                          menu(Icons.badge_rounded, "Personel"),
-                          menu(Icons.inventory_rounded, "Stok Amunisi"),
-                          menu(Icons.memory_rounded, "Perangkat"),
-                          menu(Icons.people_alt_rounded, "Pengguna"),
-                        ],
+                      child: AppMenu(
+                        selectedMenu: "Polres",
+                        onTap: (title) async {
+                          if (title == "Logout") {
+                            await logout();
+                            return;
+                          }
+
+                          Widget page;
+
+                          switch (title) {
+                            case "Dashboard":
+                              page = const DashboardPage();
+                              break;
+
+                            case "Pengaturan":
+                              page = const AccountSettingPage();
+                              break;
+
+                            case "Laporan":
+                              page = const ReportPage();
+                              break;
+
+                            case "Senjata":
+                              page = const SenjataPage();
+                              break;
+
+                            case "Satwa":
+                              page = const SatwaPage();
+                              break;
+
+                            case "Personel":
+                              page = const PersonelPage();
+                              break;
+
+                            case "Inventaris":
+                              page = const InventarisPage();
+                              break;
+
+                            case "Pengguna":
+                              page = const UserPage();
+                              break;
+
+                            case "Polda":
+                              page = const PoldaPage();
+                              break;
+
+                            case "Polres":
+                              page = const PolresPage();
+                              break;
+
+                            default:
+                              page = const DashboardPage();
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => page),
+                          );
+                        },
                       ),
                     ),
 
@@ -154,9 +193,6 @@ class _AddPolresPageState extends State<AddPolresPage> {
                       indent: 20,
                       endIndent: 20,
                     ),
-
-                    menu(Icons.settings_rounded, "Pengaturan"),
-                    menu(Icons.logout_rounded, "Logout"),
 
                     const SizedBox(height: 20),
                   ],
@@ -433,90 +469,6 @@ class _AddPolresPageState extends State<AddPolresPage> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget menu(IconData icon, String title, {bool selected = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: selected ? Colors.amber : Colors.transparent,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: ListTile(
-          leading: Icon(icon, color: selected ? Colors.black : Colors.white70),
-          title: Text(
-            title,
-            style: TextStyle(
-              color: selected ? Colors.black : Colors.white,
-              fontWeight: selected ? FontWeight.bold : FontWeight.w500,
-            ),
-          ),
-          trailing:
-              selected
-                  ? const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
-                    color: Colors.black,
-                  )
-                  : null,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-          hoverColor: Colors.white10,
-          onTap: () async {
-            if (title == "Logout") {
-              await logout();
-              return;
-            }
-            Widget page;
-
-            switch (title) {
-              case "Dashboard":
-                page = const DashboardPage();
-                break;
-
-              case "Pengaturan":
-                page = const AccountSettingPage();
-                break;
-
-              case "Laporan":
-                page = const ReportPage();
-                break;
-
-              case "Senjata":
-                page = const SenjataPage();
-                break;
-
-              case "Satwa":
-                page = const SatwaPage();
-                break;
-
-              case "Personel":
-                page = const PersonelPage();
-                break;
-
-              case "Inventaris":
-                page = const InventarisPage();
-                break;
-
-              case "Pengguna":
-                page = const UserPage();
-                break;
-
-              case "Polda":
-                page = const PoldaPage();
-                break;
-              default:
-                page = const DashboardPage();
-            }
-
-            Navigator.push(context, MaterialPageRoute(builder: (_) => page));
-          },
         ),
       ),
     );
