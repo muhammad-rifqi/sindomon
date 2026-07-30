@@ -28,12 +28,18 @@ class _PolresPageState extends State<PolresPage> {
   List<Map<String, dynamic>> polres = [];
   bool isLoading = true;
   String unLogin = "";
+  String rolesID = "";
+  String namaPolda = "";
+  String namaRoles = "";
 
   Future<void> loadUser() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       unLogin = prefs.getString("username_login") ?? "";
+      rolesID = prefs.getString("roleid_login") ?? "";
+      namaPolda = prefs.getString("polda_name") ?? "";
+      namaRoles = prefs.getString("role_name") ?? "";
     });
   }
 
@@ -485,30 +491,32 @@ class _PolresPageState extends State<PolresPage> {
                             ),
                           ),
 
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const AddPolresPage(),
+                          rolesID != "1"
+                              ? ElevatedButton.icon(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const AddPolresPage(),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.add),
+                                label: const Text("Tambah Polres"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.amber,
+                                  foregroundColor: Colors.black,
+                                  elevation: 5,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 22,
+                                    vertical: 18,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                 ),
-                              );
-                            },
-                            icon: const Icon(Icons.add),
-                            label: const Text("Tambah Polres"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.amber,
-                              foregroundColor: Colors.black,
-                              elevation: 5,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 22,
-                                vertical: 18,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                          ),
+                              )
+                              : const Text(" "),
                         ],
                       ),
 
@@ -590,73 +598,81 @@ class _PolresPageState extends State<PolresPage> {
                                                         ),
                                                         DataCell(
                                                           Row(
-                                                            children: [
-                                                              IconButton(
-                                                                icon:
-                                                                    const Icon(
-                                                                      Icons
-                                                                          .edit,
-                                                                    ),
-                                                                onPressed:
-                                                                    () {},
-                                                              ),
-                                                              IconButton(
-                                                                icon: const Icon(
-                                                                  Icons.delete,
-                                                                  color:
-                                                                      Colors
-                                                                          .red,
-                                                                ),
-                                                                onPressed: () async {
-                                                                  final result = await showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    builder:
-                                                                        (
-                                                                          _,
-                                                                        ) => AlertDialog(
-                                                                          title: const Text(
-                                                                            "Hapus Polres",
-                                                                          ),
-                                                                          content: const Text(
-                                                                            "Apakah Anda yakin ingin menghapus data ini?",
-                                                                          ),
-                                                                          actions: [
-                                                                            TextButton(
-                                                                              onPressed:
-                                                                                  () => Navigator.pop(
-                                                                                    context,
-                                                                                    false,
-                                                                                  ),
-                                                                              child: const Text(
-                                                                                "Batal",
-                                                                              ),
-                                                                            ),
-                                                                            ElevatedButton(
-                                                                              onPressed:
-                                                                                  () => Navigator.pop(
-                                                                                    context,
-                                                                                    true,
-                                                                                  ),
-                                                                              child: const Text(
-                                                                                "Hapus",
-                                                                              ),
-                                                                            ),
-                                                                          ],
+                                                            children:
+                                                                rolesID != "1"
+                                                                    ? [
+                                                                      IconButton(
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .edit,
                                                                         ),
-                                                                  );
-
-                                                                  if (result ==
-                                                                      true) {
-                                                                    deletePolres(
-                                                                      int.parse(
-                                                                        e["id"],
+                                                                        onPressed:
+                                                                            () {},
                                                                       ),
-                                                                    );
-                                                                  }
-                                                                },
-                                                              ),
-                                                            ],
+                                                                      IconButton(
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .delete,
+                                                                          color:
+                                                                              Colors.red,
+                                                                        ),
+                                                                        onPressed: () async {
+                                                                          final result = await showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder:
+                                                                                (_) => AlertDialog(
+                                                                                  title: const Text(
+                                                                                    "Hapus Polres",
+                                                                                  ),
+                                                                                  content: const Text(
+                                                                                    "Apakah Anda yakin ingin menghapus data ini?",
+                                                                                  ),
+                                                                                  actions: [
+                                                                                    TextButton(
+                                                                                      onPressed:
+                                                                                          () => Navigator.pop(
+                                                                                            context,
+                                                                                            false,
+                                                                                          ),
+                                                                                      child: const Text(
+                                                                                        "Batal",
+                                                                                      ),
+                                                                                    ),
+                                                                                    ElevatedButton(
+                                                                                      onPressed:
+                                                                                          () => Navigator.pop(
+                                                                                            context,
+                                                                                            true,
+                                                                                          ),
+                                                                                      child: const Text(
+                                                                                        "Hapus",
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                          );
+
+                                                                          if (result ==
+                                                                              true) {
+                                                                            deletePolres(
+                                                                              int.parse(
+                                                                                e["id"],
+                                                                              ),
+                                                                            );
+                                                                          }
+                                                                        },
+                                                                      ),
+                                                                    ]
+                                                                    : [
+                                                                      Text(
+                                                                        "Tidak Ada Akses",
+                                                                        style: TextStyle(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                           ),
                                                         ),
                                                       ],

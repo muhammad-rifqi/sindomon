@@ -60,8 +60,8 @@ class _AppMenuState extends State<AppMenu> {
           ),
 
           menu(Icons.description_rounded, "Laporan"),
-          menu(Icons.manage_accounts_rounded, "Pengguna"),
-          menu(Icons.settings_rounded, "Pengaturan"),
+          // menu(Icons.manage_accounts_rounded, "Pengguna"),
+          // menu(Icons.settings_rounded, "Pengaturan"),
           menu(Icons.logout_rounded, "Logout"),
         ],
 
@@ -132,7 +132,7 @@ class _AppMenuState extends State<AppMenu> {
             ],
           ),
 
-          menu(Icons.map_rounded, "Wilayah"),
+          // menu(Icons.map_rounded, "Wilayah"),
           menu(Icons.logout_rounded, "Logout"),
         ],
       ],

@@ -28,12 +28,18 @@ class _UserPageState extends State<UserPage> {
   List<Map<String, dynamic>> users = [];
   bool isLoading = true;
   String unLogin = "";
+  String rolesID = "";
+  String namaPolda = "";
+  String namaRoles = "";
 
   Future<void> loadUser() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       unLogin = prefs.getString("username_login") ?? "";
+      rolesID = prefs.getString("roleid_login") ?? "";
+      namaPolda = prefs.getString("polda_name") ?? "";
+      namaRoles = prefs.getString("role_name") ?? "";
     });
   }
 
@@ -456,6 +462,7 @@ class _UserPageState extends State<UserPage> {
                             ),
                           ),
 
+                          rolesID != "1" ?
                           ElevatedButton.icon(
                             onPressed: () {
                               Navigator.push(
@@ -479,7 +486,7 @@ class _UserPageState extends State<UserPage> {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                             ),
-                          ),
+                          ) : const Text(" "),
                         ],
                       ),
 
@@ -549,42 +556,52 @@ class _UserPageState extends State<UserPage> {
                                                         ),
                                                         DataCell(
                                                           Text(
-                                                            "${e["roles_id"]}",
+                                                            "${e["roles_name"]}",
                                                           ),
                                                         ),
                                                         DataCell(
                                                           Text(
-                                                            "${e["polda"] ?? ' - '}",
+                                                            "${e["polda_name"] ?? ' - '}",
                                                           ),
                                                         ),
                                                         DataCell(
                                                           Text(
-                                                            "${e["status"] ?? ' - '}",
+                                                            "${e["status"] ?? ' Aktif '}",
                                                           ),
                                                         ),
                                                         DataCell(
                                                           Row(
-                                                            children: [
-                                                              IconButton(
-                                                                icon:
-                                                                    const Icon(
-                                                                      Icons
-                                                                          .edit,
-                                                                    ),
-                                                                onPressed:
-                                                                    () {},
-                                                              ),
-                                                              IconButton(
-                                                                icon: const Icon(
-                                                                  Icons.delete,
-                                                                  color:
-                                                                      Colors
-                                                                          .red,
-                                                                ),
-                                                                onPressed:
-                                                                    () {},
-                                                              ),
-                                                            ],
+                                                            children:
+                                                                rolesID != "1"
+                                                                    ? [
+                                                                      IconButton(
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .edit,
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {},
+                                                                      ),
+                                                                      IconButton(
+                                                                        icon: const Icon(
+                                                                          Icons
+                                                                              .delete,
+                                                                          color:
+                                                                              Colors.red,
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {},
+                                                                      ),
+                                                                    ]
+                                                                    : [
+                                                                      Text(
+                                                                        "Tidak ada akses",
+                                                                        style: TextStyle(
+                                                                          color:
+                                                                              Colors.grey,
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                           ),
                                                         ),
                                                       ],
@@ -648,5 +665,4 @@ class _UserPageState extends State<UserPage> {
       ),
     );
   }
-
 }
