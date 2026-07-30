@@ -525,7 +525,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: Container(
                             padding: const EdgeInsets.all(30),
                             decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.4),
+                              color: Colors.white.withValues(alpha: 0.4),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Column(
