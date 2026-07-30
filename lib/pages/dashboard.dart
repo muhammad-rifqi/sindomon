@@ -28,14 +28,18 @@ class _DashboardPageState extends State<DashboardPage> {
   List<Map<String, dynamic>> provinsi = [];
   bool isLoading = true;
   String? roleId;
-  String username = "";
+  String userName = "";
+  String namaPolda = "";
+  String namaRoles = "";
 
   Future<void> getUserLogin() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       roleId = prefs.getString("roleid_login");
-      username = prefs.getString("username_login") ?? "";
+      userName = prefs.getString("username_login") ?? "";
+      namaPolda = prefs.getString("polda_name") ?? "";
+      namaRoles = prefs.getString("role_name") ?? "";
     });
   }
 
@@ -538,10 +542,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                                 const SizedBox(height: 20),
                                 Text(
-                                  "Selamat Datang,\n$username",
+                                  "Selamat Datang, $userName, \nRole Anda, $namaRoles \nPolda : $namaPolda",
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),

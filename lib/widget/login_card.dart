@@ -54,16 +54,18 @@ class _LoginCardState extends State<LoginCard> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         String token = data["jwt_token"];
-        String usernameLogin = data["data"][0]["username"];
-        String poldaLogin = data["data"][0]["polda_id"];
-        String roleID = data["data"][0]["roles_id"];
-        String uuid = data["data"][0]["uuid"];
-        String expired = data["data"][0]["expired"];
+        String usernameLogin = data["data"]["username"];
+        String poldaLogin = data["data"]["polda_id"];
+        String roleID = data["data"]["roles_id"];
+        String uuid = data["data"]["uuid"];
+        String expired = data["data"]["expired"];
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString("token", token);
         await prefs.setString("username_login", usernameLogin);
         await prefs.setString("polda_login", poldaLogin);
         await prefs.setString("roleid_login", roleID);
+        await prefs.setString("polda_name", data["data"]["polda_name"]);
+        await prefs.setString("role_name", data["data"]["roles_name"]);
         await prefs.setString("uuid_login", uuid);
         await prefs.setString("expired_login", expired);
         if (!mounted) return;
@@ -93,6 +95,7 @@ class _LoginCardState extends State<LoginCard> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       width: 320,
       padding: const EdgeInsets.all(20),
