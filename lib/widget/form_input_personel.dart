@@ -27,10 +27,13 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
   Future<void> getPolda() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("token");
-
+    final idp = prefs.getString("polda_login");
+    // print(idp);
     try {
       final response = await http.get(
-        Uri.parse('https://sindomon.yoknusantara.com/api/v1/polda'),
+        Uri.parse(
+          'https://sindomon.yoknusantara.com/api/v1/polda/$idp',
+        ),
         headers: {"Authorization": token.toString()},
       );
 

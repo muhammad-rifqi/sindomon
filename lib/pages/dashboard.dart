@@ -467,11 +467,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                     SizedBox(height: 10),
 
                                     Text(
-                                      "• Laporan 1\n"
-                                      "• Laporan 2\n"
-                                      "• Laporan 3\n"
-                                      "• Laporan 4\n"
-                                      "• Laporan 5",
+                                      "0\n",
                                       style: TextStyle(color: Colors.white70),
                                     ),
                                   ],
@@ -489,7 +485,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                                   const SizedBox(width: 20),
 
-                                  _kpiCard("K9 Standby", "140"),
+                                  _kpiCard("K9 Standby", "0"),
                                 ],
                               ),
                             ),
