@@ -73,6 +73,8 @@ class _AppMenuState extends State<AppMenu> {
             icon: Icons.groups_rounded,
             title: "Master SDM",
             children: [
+              menu(Icons.account_balance_rounded, "Polda"),
+              menu(Icons.location_city_rounded, "Polres"),
               menu(Icons.apartment_rounded, "Organisasi"),
               menu(Icons.badge_rounded, "Personel"),
               menu(Icons.gavel_rounded, "Hukum"),

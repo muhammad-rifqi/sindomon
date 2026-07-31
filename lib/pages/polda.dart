@@ -96,11 +96,25 @@ class _PoldaPageState extends State<PoldaPage> {
         body: jsonEncode({"polda_id": id}),
       );
 
+      if (!mounted) return;
+
+      final result = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        debugPrint(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              result["data"],
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
         getPoldaApi();
       } else {
-        debugPrint("Error : ${response.body}");
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(result["data"])));
       }
     } catch (e) {
       debugPrint(e.toString());

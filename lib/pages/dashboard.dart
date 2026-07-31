@@ -27,6 +27,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   List<Map<String, dynamic>> provinsi = [];
   bool isLoading = true;
+  Map<String, dynamic>? selectedPolda;
   String? roleId;
   String userName = "";
   String namaPolda = "";
@@ -286,58 +287,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                               behavior: HitTestBehavior.opaque,
 
                                               onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                      backgroundColor:
-                                                          const Color(
-                                                            0xff1E1B4B,
-                                                          ),
-
-                                                      title: Text(
-                                                        p["nama_polda"]
-                                                            as String,
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-
-                                                      content: const Text(
-                                                        "DATA WILAYAH\n\n"
-                                                        "👮 Personel : 2.450\n"
-                                                        "📦 Inventaris : 1.200\n"
-                                                        "🔫 Senjata : 500\n"
-                                                        "🐕 Satwa : 25\n\n"
-                                                        "STATUS : AKTIF",
-                                                        style: TextStyle(
-                                                          color: Colors.white70,
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
-
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                              context,
-                                                            );
-                                                          },
-
-                                                          child: const Text(
-                                                            "Tutup",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.amber,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
+                                                setState(() {
+                                                  selectedPolda = p;
+                                                });
                                               },
 
                                               child: Tooltip(
@@ -409,62 +361,80 @@ class _DashboardPageState extends State<DashboardPage> {
                               top: 20,
                               right: 20,
                               child: Container(
-                                width: 240,
+                                width: 280,
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
                                   color: Colors.black.withValues(alpha: 0.20),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(color: Colors.cyanAccent),
                                 ),
-                                child: const Column(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Total Personel",
-                                      style: TextStyle(color: Colors.white70),
-                                    ),
-
-                                    SizedBox(height: 5),
-
-                                    Text(
-                                      "153,500",
-                                      style: TextStyle(
-                                        color: Colors.cyanAccent,
-                                        fontSize: 28,
+                                      selectedPolda?["nama_polda"] ??
+                                          "Pilih Marker Polda",
+                                      style: const TextStyle(
+                                        color: Colors.amber,
+                                        fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
 
-                                    SizedBox(height: 15),
+                                    const SizedBox(height: 20),
 
                                     Text(
-                                      "Defense Equipment",
+                                      "Personel",
                                       style: TextStyle(color: Colors.white70),
                                     ),
-
-                                    SizedBox(height: 5),
-
                                     Text(
-                                      "97%",
-                                      style: TextStyle(
+                                      "${selectedPolda?["jumlah_personel"] ?? "0"}",
+                                      style: const TextStyle(
                                         color: Colors.cyanAccent,
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
 
-                                    SizedBox(height: 15),
+                                    const SizedBox(height: 15),
 
                                     Text(
-                                      "Vacant Position",
+                                      "Inventaris",
                                       style: TextStyle(color: Colors.white70),
                                     ),
+                                    Text(
+                                      "${selectedPolda?["jumlah_inventaris"] ?? "0"}",
+                                      style: const TextStyle(
+                                        color: Colors.cyanAccent,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
 
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 15),
 
                                     Text(
-                                      "218",
-                                      style: TextStyle(
+                                      "Senjata",
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    Text(
+                                      "${selectedPolda?["jumlah_senjata"] ?? "0"}",
+                                      style: const TextStyle(
+                                        color: Colors.cyanAccent,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 15),
+
+                                    Text(
+                                      "Satwa",
+                                      style: TextStyle(color: Colors.white70),
+                                    ),
+                                    Text(
+                                      "${selectedPolda?["jumlah_satwa"] ?? "0"}",
+                                      style: const TextStyle(
                                         color: Colors.cyanAccent,
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
@@ -515,7 +485,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               left: 300,
                               child: Row(
                                 children: [
-                                  _kpiCard("Active Fleet", "300"),
+                                  _kpiCard("Active Fleet", "0"),
 
                                   const SizedBox(width: 20),
 
