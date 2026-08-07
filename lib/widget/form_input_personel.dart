@@ -31,9 +31,7 @@ class _FormTambahPersonelState extends State<FormTambahPersonel> {
     // print(idp);
     try {
       final response = await http.get(
-        Uri.parse(
-          'https://sindomon.yoknusantara.com/api/v1/polda/$idp',
-        ),
+        Uri.parse('https://sindomon.yoknusantara.com/api/v1/polda/$idp'),
         headers: {"Authorization": token.toString()},
       );
 
