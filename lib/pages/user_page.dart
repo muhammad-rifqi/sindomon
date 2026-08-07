@@ -429,7 +429,7 @@ class _UserPageState extends State<UserPage> {
                                         ),
                                       ),
                                       Text(
-                                        "Super Admin",
+                                        namaRoles,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black54,

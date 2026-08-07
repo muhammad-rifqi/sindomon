@@ -28,12 +28,18 @@ class _PersonelPageState extends State<PersonelPage> {
   List<Map<String, dynamic>> datapersonel = [];
   bool isLoading = true;
   String unLogin = "";
+  String rolesID = "";
+  String namaPolda = "";
+  String namaRoles = "";
 
   Future<void> loadUser() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       unLogin = prefs.getString("username_login") ?? "";
+      rolesID = prefs.getString("roleid_login") ?? "";
+      namaPolda = prefs.getString("polda_name") ?? "";
+      namaRoles = prefs.getString("role_name") ?? "";
     });
   }
 
@@ -453,7 +459,7 @@ class _PersonelPageState extends State<PersonelPage> {
                                         ),
                                       ),
                                       Text(
-                                        "Super Admin",
+                                        namaRoles,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black54,

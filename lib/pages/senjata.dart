@@ -28,12 +28,19 @@ class _SenjataPageState extends State<SenjataPage> {
   List<Map<String, dynamic>> senjataapi = [];
   bool isLoading = true;
   String unLogin = "";
+  String rolesID = "";
+  String namaPolda = "";
+  String namaRoles = "";
 
   Future<void> loadUser() async {
     final prefs = await SharedPreferences.getInstance();
 
     setState(() {
       unLogin = prefs.getString("username_login") ?? "";
+      rolesID = prefs.getString("roleid_login") ?? "";
+      namaPolda = prefs.getString("polda_name") ?? "";
+      namaRoles = prefs.getString("role_name") ?? "";
+      
     });
   }
 

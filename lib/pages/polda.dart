@@ -479,7 +479,7 @@ class _PoldaPageState extends State<PoldaPage> {
                                         ),
                                       ),
                                       Text(
-                                        "Super Admin",
+                                        namaRoles,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black54,
